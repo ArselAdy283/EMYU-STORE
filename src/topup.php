@@ -32,19 +32,38 @@
     <!-- Hero Section -->
     <section class="h-screen flex items-center justify-between px-12">
         <!-- Character Image -->
-        <div class="flex-shrink-0 mt-90 translate-x-[-100px]">
+        <div class="flex-shrink-0 mt-90 translate-x-[1000px]">
             <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-135">
         </div>
 
-        <!-- Content -->
-        <div class="w-1/3 text-left translate-x-[-200px] translate-y-[-100px]">
-            <h1 class="text-[70px] font-extrabold text-[color:#ffed00]">EMYUSTORE</h1>
-            <p class="text-white mt-4 max-w-md">
-                Penuhi kebutuhan gamingmu hanya di EMYUSTORE aja, paling lengkap dan juga paling MURAH.
+        <!-- Konten Kiri -->
+        <div class="flex flex-col items-center text-center space-y-12 translate-x-[-700px] translate-y-[-100px]">
+            <!-- Judul -->
+            <h1 class="text-[70px] font-extrabold text-[color:#ffed00]">GAMES</h1>
+
+            <!-- Card Games -->
+            <div class="flex space-x-8">
+                <!-- Card 1 -->
+                <div class="bg-red-800/80 rounded-2xl p-4 w-[160px]">
+                    <img src="assets/mlbb-logo.jpg" alt="Mobile Legends" class="rounded-lg">
+                    <p class="mt-2">Mobile Legends: bang bang</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-red-800/80 rounded-2xl p-4 w-[160px]">
+                    <img src="assets/efootball-logo.jpg" alt="Efootball" class="rounded-lg">
+                    <p class="mt-2">Efootball</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-red-800/80 rounded-2xl p-4 w-[160px]">
+                    <img src="assets/ff-logo.jpg" alt="Free Fire" class="rounded-lg">
+                    <p class="mt-2">Free Fire: Rampage</p>
+                </div>
+            </div>
+
+            <!-- Deskripsi -->
+            <p class="max-w-lg text-white">
+                MAU TOP UP YANG MANA?
             </p>
-            <button class="mt-20 translate-x-[180px] px-8 py-3 bg-red-500 rounded-full font-semibold text-white text-lg shadow-lg hover:bg-red-600 transition" onclick="window.location.href='topup.php'">
-                TopUp
-            </button>
         </div>
     </section>
 
