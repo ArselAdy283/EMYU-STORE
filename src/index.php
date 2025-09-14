@@ -22,7 +22,7 @@
 
         <!-- Menu -->
         <ul class="flex space-x-8 text-xl font-semibold">
-            <li><a href="#" class="hover:text-[color:#ffed00]">Home</a></li>
+            <li><a href="index.php" class="hover:text-[color:#ffed00]">Home</a></li>
             <li><a href="#" class="hover:text-[color:#ffed00]">History</a></li>
             <li><a href="#" class="text-[color:#ffed00]">Social</a></li>
             <li><a href="#" class="hover:text-[color:#ffed00]">Account</a></li>
@@ -33,7 +33,7 @@
     <section class="h-screen flex items-center justify-between px-12">
         <!-- Character Image -->
         <div class="flex-shrink-0 mt-90 translate-x-[-100px]">
-            <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-135">
+            <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-140">
         </div>
 
         <!-- Content -->
