@@ -51,9 +51,9 @@
             hover:scale-105 transition">
                 <img src="assets/<?= $row['icon_item']; ?>"
                     alt="<?= $row['nama_item']; ?>"
-                    class="w-25 h-25 mb-2">
+                    class="w-35 h-35 mb-2">
                 <p class="text-white text-sm font-semibold">
-                    <?= $row['nama_item']; ?> (<?= $row['jumlah_item']; ?>)
+                    <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                 </p>
                 <p class="text-white text-xs">Rp <?= number_format($row['harga_item']); ?></p>
             </div>
