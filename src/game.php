@@ -12,15 +12,24 @@
 <body class="bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
     <?php
     include 'navbar.php';
+    include 'koneksi.php';
     ?>
     <!-- Content -->
     <div class="px-6 md:px-16 lg:px-24 py-10">
         <!-- Header Game -->
+        <?php
+        $game = isset($_GET['id']) ? $_GET['id'] : '';
+
+        // Query game sesuai parameter
+        $query = mysqli_query($koneksi, "SELECT * FROM games WHERE id_game = '$game'");
+        $data = mysqli_fetch_array($query);
+
+        ?>
+
         <div class="flex items-center gap-4 mb-10 translate-x-[25px]">
-            <img src="assets/mlbb-logo.jpg" alt="Mobile Legends" class="w-16 h-16 rounded-xl">
+            <img src="assets/<?= $data['icon_game'];?>" alt="<?= $data['nama_game']?>" class="w-16 h-16 rounded-xl">
             <div>
-                <h1 class="text-2xl font-bold">Mobile Legends:</h1>
-                <p class="text-lg font-medium -mt-1">bang bang</p>
+                <h1 class="text-2xl font-bold"><?= $data['nama_game']; ?></h1>
             </div>
         </div>
 
