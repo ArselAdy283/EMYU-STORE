@@ -54,7 +54,7 @@
                 <div class="bg-red-800/70 backdrop-blur-md rounded-2xl p-4 w-[160px] shadow-xl transform transition duration-300 hover:scale-110">
                     <a href="game.php?id=2">
                         <img src="assets/efootball-logo.jpg" alt="Efootball" class="rounded-lg">
-                        <p class="mt-2">Efootball</p>
+                        <p class="mt-2">eFootball™</p>
                     <a>
                 </div>
                 <!-- Card 3 -->

@@ -48,7 +48,7 @@
         while ($row = mysqli_fetch_assoc($query)) : ?>
             <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl
             flex flex-col items-center justify-center
-            hover:scale-105 transition">
+            transform transition duration-300 hover:scale-110">
                 <img src="assets/<?= $row['icon_item']; ?>"
                     alt="<?= $row['nama_item']; ?>"
                     class="w-35 h-35 mb-2">
