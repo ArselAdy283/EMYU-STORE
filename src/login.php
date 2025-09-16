@@ -1,40 +1,75 @@
+<?php
+
+session_start();
+include 'koneksi.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMYUSTORE</title>
-    <link href="./output.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMYUSTORE</title>
+  <link href="./output.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] min-h-screen text-white">
   <?php include 'navbar.php'; ?>
 
   <!-- Judul -->
   <h1 class="text-5xl font-extrabold text-[#ffed00] text-center mt-12">Account</h1>
+  <?php
+
+  if (isset($_POST['username'])) {
+    $username = $_POST['username'];
+    $password = md5($_POST['password']);
+
+    $query = mysqli_query($koneksi, "SELECT * FROM users WHERE username='$username' AND password='$password'");
+
+    if (mysqli_num_rows($query) > 0) {
+      $data = mysqli_fetch_array($query);
+      $_SESSION['user'] = $data;
+      header('Location: account.php');
+    } else {
+      echo '<h1 class="bg-red-500 text-white text-center translate-x-[580px] translate-y-[20px] w-[382px]">Ada yang salah dengan username atau passwordnya</h1>';
+    }
+  }
+
+  if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit;
+  }
+
+  ?>
 
   <!-- Form -->
-  <div class="flex flex-col items-center mt-10 space-y-6">
-    <!-- Username -->
+  <form method="POST" action="" class="flex flex-col items-center mt-10 space-y-6">
     <div class="flex items-center w-80 bg-white rounded-2xl px-4 py-3 text-[#922]">
-      <img src="assets/user.svg" class="h-6 w-6 mr-3"/>
-      <input type="text" name="username" placeholder="Username" class="w-full outline-none bg-transparent text-[#922]" />
+      <img src="assets/user.svg" class="h-6 w-6 mr-3" />
+      <input type="text" name="username" placeholder="Username"
+        class="w-full outline-none bg-transparent text-[#922]" />
     </div>
 
     <!-- Password -->
     <div class="flex items-center w-80 bg-white rounded-2xl px-4 py-3 text-[#922]">
-      <img src="assets/lock-key.svg" class="h-6 w-6 mr-3"/>
-      <input type="password" name="password" placeholder="Password" class="w-full outline-none bg-transparent text-[#922]" />
+      <img src="assets/lock-key.svg" class="h-6 w-6 mr-3" />
+      <input type="password" name="password" placeholder="Password"
+        class="w-full outline-none bg-transparent text-[#922]" />
     </div>
 
     <!-- Tombol -->
-    <button type="submit" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">LOGIN</button>
+    <button type="submit"
+      class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">LOGIN</button>
 
-    <!-- Link daftar -->
     <p class="text-sm mt-6">
       Belum punya akun?
       <a href="register.php" class="text-blue-400 hover:underline">registrasi sekarang</a>
     </p>
-  </div>
+  </form>
+  <!-- Link daftar -->
 </body>
+
 </html>
