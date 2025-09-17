@@ -23,24 +23,25 @@ include 'koneksi.php';
   <h1 class="text-5xl font-extrabold text-[#ffed00] text-center mt-12">Account</h1>
   <?php
 
-  if (isset($_POST['username'])) {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
-    $password = md5($_POST['password']);
+    $password = $_POST['password'];
 
-    $query = mysqli_query($koneksi, "SELECT * FROM users WHERE username='$username' AND password='$password'");
+    $stmt = $koneksi->prepare("SELECT id_user, password FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $stmt->close();
 
-    if (mysqli_num_rows($query) > 0) {
-      $data = mysqli_fetch_array($query);
-      $_SESSION['user'] = $data;
+    if ($user && password_verify($password, $user['password'])) {
+      $_SESSION['user_id'] = $user['id_user'];
+      $_SESSION['username'] = $username;
       header('Location: account.php');
+      exit;
     } else {
       echo '<h1 class="bg-red-500 text-white text-center translate-x-[580px] translate-y-[20px] w-[382px]">Ada yang salah dengan username atau passwordnya</h1>';
     }
-  }
-
-  if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
   }
 
   ?>

@@ -47,15 +47,16 @@
         mysqli_data_seek($query, 0);
         while ($row = mysqli_fetch_assoc($query)) : ?>
             <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl
-            flex flex-col items-center justify-center
             transform transition duration-300 hover:scale-110">
-                <img src="assets/<?= $row['icon_item']; ?>"
-                    alt="<?= $row['nama_item']; ?>"
-                    class="w-35 h-35 mb-2">
-                <p class="text-white text-sm font-semibold">
-                    <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
-                </p>
-                <p class="text-white text-xs">Rp <?= number_format($row['harga_item']); ?></p>
+                <a class="flex flex-col items-center justify-center">
+                    <img src="assets/<?= $row['icon_item']; ?>"
+                        alt="<?= $row['nama_item']; ?>"
+                        class="w-35 h-35 mb-2">
+                    <p class="text-white text-sm font-semibold">
+                        <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
+                    </p>
+                    <p class="text-white text-xs">Rp <?= number_format($row['harga_item']); ?></p>
+                </a>
             </div>
         <?php endwhile; ?>
     </div>
