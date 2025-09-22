@@ -35,7 +35,7 @@ include 'koneksi.php';
     $stmt->close();
 
     if ($user && password_verify($password, $user['password'])) {
-      $_SESSION['user_id'] = $user['id_user'];
+      $_SESSION['id_user'] = $user['id_user'];
       $_SESSION['username'] = $username;
       $_SESSION['display_name'] = $user['display_name'];
       header('Location: account.php');
