@@ -23,7 +23,7 @@ if (!isset($_SESSION['username'])) {
 
     ?>
 
-    <div class="flex flex-col items-center mt-10 translate-x-[200px] translate-y-[-50px]">
+    <div class="flex flex-col items-center mt-10 translate-x-[180px] translate-y-[-50px]">
         <section class="w-2/3 pt-6 pb-20">
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
                 <div class="flex items-center gap-6">
@@ -33,39 +33,50 @@ if (!isset($_SESSION['username'])) {
 
                     <div class="flex-1">
                         <div class="bg-white text-[color:#81302b] inline-block rounded-full px-6 py-2 text-xl font-semibold translate-y-[10px]">
-                            <?php echo $_SESSION['display_name']; ?>
+                            <?= $_SESSION['display_name']; ?>
                         </div>
-                        <div class="mt-2 text-[20px] translate-x-[10px] translate-y-[7px] text-white">username: <?php echo $_SESSION['username']; ?></div>
+                        <div class="mt-2 text-[20px] translate-x-[10px] translate-y-[7px] text-white">username: <?= $_SESSION['username']; ?></div>
                     </div>
                 </div>
             </div>
 
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 rounded-2xl p-8 shadow-2xl">
                 <div class="grid grid-cols-3 gap-6 text-white text-center">
-                    <a href="history.php" class="flex flex-col items-center gap-3 hover:opacity-80">
+                    <a href="history.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
                         <img src="assets/clock-counter-clockwise.svg" alt="history" class="w-14 h-14 invert">
                         <div class="mt-1 text-lg">History</div>
                     </a>
 
-                    <a href="logout.php" class="flex flex-col items-center gap-3 hover:opacity-80">
-                        <img src="assets/sign-out.svg" alt="logout" class="w-14 h-14 invert">
-                        <div class="mt-1 text-lg">Logout</div>
-                    </a>
+                    <button onclick="document.getElementById('popup').classList.remove('hidden')"
+                        class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
+                        <img src="assets/gear.svg" alt="setting" class="w-14 h-14 invert">
+                        <div class="mt-1 text-lg">Setting</div>
+                    </button>
 
-                    <a href="game.php" class="flex flex-col items-center gap-3 hover:opacity-80">
+                    <a href="game.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
                         <img src="assets/game-controller.svg" alt="game" class="w-14 h-14 invert">
                         <div class="mt-1 text-lg">Akun Game</div>
                     </a>
 
-                    <div class="col-span-3 flex justify-center mt-4">
-                        <div class="flex flex-col items-center gap-3">
-                            <img src="assets/gear.svg" alt="security" class="w-16 h-16 invert">
-                            <div class="mt-1 text-lg">Setting</div>
-                        </div>
+                    <div class="col-span-3 flex justify-center mt-2">
+                        <a href="logout.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
+                            <img src="assets/sign-out.svg" alt="logout" class="w-14 h-14 invert">
+                            <div class="mt-1 text-lg">Logout</div>
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
+        <!-- Modal -->
+        <div id="popup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
+            <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
+                <button onclick="document.getElementById('popup').classList.add('hidden')"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">&times;</button>
+
+                <?php include 'setting.php'; ?>
+            </div>
+        </div>
+
 </body>
 
 </html>
