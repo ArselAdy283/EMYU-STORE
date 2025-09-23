@@ -47,16 +47,16 @@ if (!isset($_SESSION['username'])) {
                         <div class="mt-1 text-lg">History</div>
                     </a>
 
-                    <button onclick="document.getElementById('popup').classList.remove('hidden')"
+                    <button onclick="document.getElementById('settingPopup').classList.remove('hidden')"
                         class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
                         <img src="assets/gear.svg" alt="setting" class="w-14 h-14 invert">
                         <div class="mt-1 text-lg">Setting</div>
                     </button>
 
-                    <a href="game.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
+                    <button onclick="document.getElementById('akunGamePopup').classList.remove('hidden')" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
                         <img src="assets/game-controller.svg" alt="game" class="w-14 h-14 invert">
                         <div class="mt-1 text-lg">Akun Game</div>
-                    </a>
+                    </button>
 
                     <div class="col-span-3 flex justify-center mt-2">
                         <a href="logout.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
@@ -67,16 +67,25 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </div>
         </section>
-        <!-- Modal -->
-        <div id="popup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
+        <!-- SETTING POPUP -->
+        <div id="settingPopup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
             <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
-                <button onclick="document.getElementById('popup').classList.add('hidden')"
-                    class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">&times;</button>
+                <button onclick="document.getElementById('settingPopup').classList.add('hidden')"
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
 
                 <?php include 'setting.php'; ?>
             </div>
         </div>
 
+        <!-- AKUN GAME POPUP -->
+        <div id="akunGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
+            <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
+                <button onclick="document.getElementById('akunGamePopup').classList.add('hidden')"
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
+
+                <?php include 'account_game.php'; ?>
+            </div>
+        </div>
 </body>
 
 </html>

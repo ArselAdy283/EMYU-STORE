@@ -4,6 +4,7 @@ include 'koneksi.php';
 
 <h2 class="text-5xl font-extrabold text-[#ffed00] text-center mb-4">Setting</h2>
 <form method="POST" action="" class="flex flex-col items-center mt-10 space-y-6">
+    <input type="hidden" name="id" value="<?= $_SESSION['id_user']; ?>">
     <h2 class="text-xl font-semibold mb-2">Display Name</h2>
     <div class="flex items-center w-80 bg-white rounded-2xl px-4 py-3 text-[#922]">
         <img src="assets/user.svg" class="h-6 w-6 mr-3" />

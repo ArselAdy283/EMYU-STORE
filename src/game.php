@@ -16,7 +16,6 @@
 
     $game = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-    // Query semua data game + item
     $query = mysqli_query(
         $koneksi,
         "SELECT g.id_game, g.nama_game, g.icon_game, 
@@ -26,11 +25,9 @@
      WHERE g.id_game = $game"
     );
 
-    // Ambil satu baris pertama untuk header game
     $dataGame = mysqli_fetch_assoc($query);
     ?>
 
-    <!-- Header Game -->
     <div class="flex items-center gap-4 mb-10 translate-x-[125px]">
         <img src="assets/<?= $dataGame['icon_game']; ?>"
             alt="<?= $dataGame['nama_game'] ?>"
@@ -40,10 +37,9 @@
         </div>
     </div>
 
-    <!-- Grid Item -->
     <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px]">
         <?php
-        // balikin pointer ke awal biar bisa di-loop lagi
+
         mysqli_data_seek($query, 0);
         while ($row = mysqli_fetch_assoc($query)) : ?>
             <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl
