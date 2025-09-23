@@ -37,7 +37,12 @@
         </div>
     </div>
 
-    <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px]">
+    <div class="flex px-[20px] w-[500px] h-[50px] translate-x-[103px] gap-6">
+        <input type="tel" placeholder="ID USER" class="flex items-center w-80 bg-red-800/70 rounded-2xl px-4 text-white">
+        <input type="tel" placeholder="ID ZONA" class="flex items-center w-80 bg-red-800/70 rounded-2xl px-4 text-white">
+    </div>
+
+    <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px] translate-y-[30px]">
         <?php
 
         mysqli_data_seek($query, 0);

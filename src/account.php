@@ -86,6 +86,16 @@ if (!isset($_SESSION['username'])) {
                 <?php include 'account_game.php'; ?>
             </div>
         </div>
+
+        <!-- INPUT ID GAME POPUP -->
+        <div id="idGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
+            <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
+                <button onclick="document.getElementById('idGamePopup').classList.add('hidden')"
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
+
+                <?php include 'edit_akun_game.php'; ?>
+            </div>
+        </div>
 </body>
 
 </html>
