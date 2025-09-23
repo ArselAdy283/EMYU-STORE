@@ -20,7 +20,7 @@ include 'koneksi.php';
     </div>
 
     <!-- Tombol -->
-    <button type="submit" name="update" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition" name="submit">EDIT</button>
+    <button type="submit" name="update" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">EDIT</button>
 </form>
 
 <?php
