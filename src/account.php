@@ -93,9 +93,12 @@ if (!isset($_SESSION['username'])) {
                 <button onclick="document.getElementById('idGamePopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
 
-                <?php include 'edit_akun_game.php'; ?>
+                <div id="idGamePopupContent">
+                    <!-- Konten edit_akun_game.php bakal dimuat di sini lewat fetch -->
+                </div>
             </div>
         </div>
+
 </body>
 
 </html>

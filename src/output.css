@@ -7,10 +7,12 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
     --color-red-800: oklch(44.4% 0.177 26.899);
     --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-green-400: oklch(79.2% 0.209 151.711);
     --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-black: #000;
@@ -298,9 +300,6 @@
   .h-\[445px\] {
     height: 445px;
   }
-  .h-\[500px\] {
-    height: 500px;
-  }
   .h-screen {
     height: 100vh;
   }
@@ -412,36 +411,8 @@
     --tw-translate-x: 10px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
-  .translate-x-\[18px\] {
-    --tw-translate-x: 18px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-x-\[100px\] {
-    --tw-translate-x: 100px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-x-\[101px\] {
-    --tw-translate-x: 101px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
   .translate-x-\[103px\] {
     --tw-translate-x: 103px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-x-\[104px\] {
-    --tw-translate-x: 104px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-x-\[105px\] {
-    --tw-translate-x: 105px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-x-\[108px\] {
-    --tw-translate-x: 108px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-x-\[110px\] {
-    --tw-translate-x: 110px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-x-\[125px\] {
@@ -490,14 +461,6 @@
   }
   .translate-y-\[30px\] {
     --tw-translate-y: 30px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-y-\[35px\] {
-    --tw-translate-y: 35px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-y-\[45px\] {
-    --tw-translate-y: 45px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-y-\[50px\] {
@@ -559,27 +522,6 @@
       margin-block-end: calc(calc(var(--spacing) * 12) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
-  .space-x-1 {
-    :where(& > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-      margin-inline-start: calc(calc(var(--spacing) * 1) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-x-reverse)));
-    }
-  }
-  .space-x-2 {
-    :where(& > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-      margin-inline-start: calc(calc(var(--spacing) * 2) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-x-reverse)));
-    }
-  }
-  .space-x-3 {
-    :where(& > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-      margin-inline-start: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-  }
   .space-x-6 {
     :where(& > :not(:last-child)) {
       --tw-space-x-reverse: 0;
@@ -592,13 +534,6 @@
       --tw-space-x-reverse: 0;
       margin-inline-start: calc(calc(var(--spacing) * 8) * var(--tw-space-x-reverse));
       margin-inline-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-x-reverse)));
-    }
-  }
-  .space-x-\[100px\] {
-    :where(& > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-      margin-inline-start: calc(100px * var(--tw-space-x-reverse));
-      margin-inline-end: calc(100px * calc(1 - var(--tw-space-x-reverse)));
     }
   }
   .rounded-2xl {
@@ -776,6 +711,12 @@
   }
   .text-blue-400 {
     color: var(--color-blue-400);
+  }
+  .text-green-400 {
+    color: var(--color-green-400);
+  }
+  .text-red-400 {
+    color: var(--color-red-400);
   }
   .text-white {
     color: var(--color-white);

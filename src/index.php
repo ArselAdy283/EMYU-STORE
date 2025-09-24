@@ -43,7 +43,7 @@
                 Penuhi kebutuhan gamingmu hanya di EMYUSTORE aja, paling lengkap dan juga paling MURAH.
             </p>
             <button class="mt-20 translate-x-[180px] px-8 py-3 bg-red-500 rounded-full font-semibold text-white text-lg shadow-lg hover:bg-red-600 transition" onclick="window.location.href='topup.php'">
-                TopUp
+                Top Up
             </button>
         </div>
     </section>
