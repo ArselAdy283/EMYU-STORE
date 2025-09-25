@@ -51,7 +51,7 @@ if ($id_user) {
 
     <!-- FORM INPUT -->
     <form method="POST" action="edit_akun_game.php?game=<?= strtolower($dataGame['nama_game']); ?>"
-        class="flex flex-col gap-4 w-[500px] translate-x-[103px] mb-10">
+        class="flex flex-col gap-4 w-[500px] translate-x-[103px] mb-[25px]">
 
         <?php if ($game == 1): // MLBB 
         ?>
