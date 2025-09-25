@@ -55,6 +55,9 @@ if (isset($_POST['edit_akun_game'])) {
         <div class="flex items-center w-80 bg-white rounded-2xl px-4 py-3 text-[#922]">
             <input type="tel" name="id_zona_game" value="<?= htmlspecialchars($old['id_zona_game'] ?? '') ?>" class="w-full outline-none bg-transparent text-[#922]" />
         </div>
+        <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
+
+        <button type="submit" name="hapus_akun_game" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</button>
 
     <?php elseif ($game == 'ff') : ?>
         <h2 class="text-xl font-semibold mb-2">ID AKUN</h2>
@@ -62,16 +65,20 @@ if (isset($_POST['edit_akun_game'])) {
             <input type="tel" name="id_akun_game" value="<?= htmlspecialchars($old['id_akun'] ?? '') ?>" required class="w-full outline-none bg-transparent text-[#922]" />
         </div>
 
+        <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
+
+        <button type="submit" name="hapus_akun_game" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</button>
+
     <?php elseif ($game == 'efootball') : ?>
         <h2 class="text-xl font-semibold mb-2">USERNAME</h2>
         <div class="flex items-center w-80 bg-white rounded-2xl px-4 py-3 text-[#922]">
             <input type="text" name="username_efootball" value="<?= htmlspecialchars($old['username_akun'] ?? '') ?>" required class="w-full outline-none bg-transparent text-[#922]" />
         </div>
+
+        <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
+
+        <button type="submit" name="hapus_akun_game" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</button>
     <?php else : ?>
         <p class="text-red-400">Pilih game dari daftar terlebih dahulu.</p>
-    <?php endif; ?>
-
-    <?php if ($game) : ?>
-        <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
     <?php endif; ?>
 </form>
