@@ -7,8 +7,8 @@ $id_user = $_SESSION['id_user'];
 
 $id_game = null;
 if ($game == 'mlbb') $id_game = 1;
-elseif ($game == 'ff') $id_game = 2;
-elseif ($game == 'efootball') $id_game = 3;
+elseif ($game == 'efootball') $id_game = 2;
+elseif ($game == 'ff') $id_game = 3;
 
 $old = null;
 if ($id_game) {

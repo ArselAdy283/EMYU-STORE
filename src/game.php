@@ -1,3 +1,32 @@
+<?php
+session_start();
+include 'navbar.php';
+include 'koneksi.php';
+
+$id_user = $_SESSION['id_user'] ?? null;
+
+$game = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+$query = mysqli_query(
+    $koneksi,
+    "SELECT g.id_game, g.nama_game, g.icon_game, 
+            i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
+     FROM games g
+     JOIN items i ON g.id_game = i.id_game
+     WHERE g.id_game = $game"
+);
+$dataGame = mysqli_fetch_assoc($query);
+
+$akun = null;
+if ($id_user) {
+    $stmt = $koneksi->prepare("SELECT * FROM akun_game WHERE id_user = ? AND id_game = ?");
+    $stmt->bind_param("ii", $id_user, $game);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $akun = $result->fetch_assoc();
+    $stmt->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,23 +39,6 @@
 </head>
 
 <body class="bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
-    <?php
-    include 'navbar.php';
-    include 'koneksi.php';
-
-    $game = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-    $query = mysqli_query(
-        $koneksi,
-        "SELECT g.id_game, g.nama_game, g.icon_game, 
-            i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
-     FROM games g
-     JOIN items i ON g.id_game = i.id_game
-     WHERE g.id_game = $game"
-    );
-
-    $dataGame = mysqli_fetch_assoc($query);
-    ?>
 
     <div class="flex items-center gap-4 mb-10 translate-x-[125px]">
         <img src="assets/<?= $dataGame['icon_game']; ?>"
@@ -37,18 +49,51 @@
         </div>
     </div>
 
-    <div class="flex px-[20px] w-[500px] h-[50px] translate-x-[103px] gap-6">
-        <input type="tel" placeholder="ID USER" class="flex items-center w-80 bg-red-800/70 rounded-2xl px-4 text-white">
-        <input type="tel" placeholder="ID ZONA" class="flex items-center w-80 bg-red-800/70 rounded-2xl px-4 text-white">
-    </div>
+    <!-- FORM INPUT -->
+    <form method="POST" action="edit_akun_game.php?game=<?= strtolower($dataGame['nama_game']); ?>"
+        class="flex flex-col gap-4 w-[500px] translate-x-[103px] mb-10">
 
-    <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px] translate-y-[30px]">
+        <?php if ($game == 1): // MLBB 
+        ?>
+            <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
+                <input type="tel" name="id_akun_game"
+                    placeholder="ID AKUN"
+                    value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
+                    class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
+
+                <input type="tel" name="id_zona_game"
+                    placeholder="ID ZONA"
+                    value="<?= htmlspecialchars($akun['id_zona_game'] ?? '') ?>"
+                    class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white">
+            </div>
+
+        <?php elseif ($game == 2): // Efootball 
+        ?>
+            <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
+                <input type="text" name="username_efootball"
+                    placeholder="USERNAME"
+                    value="<?= htmlspecialchars($akun['username_akun'] ?? '') ?>"
+                    class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
+            </div>
+
+        <?php elseif ($game == 3): // Free Fire 
+        ?>
+            <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
+                <input type="tel" name="id_akun_game"
+                    placeholder="ID AKUN"
+                    value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
+                    class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
+            </div>
+
+        <?php endif; ?>
+    </form>
+
+    <!-- LIST ITEM -->
+    <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px]">
         <?php
-
         mysqli_data_seek($query, 0);
         while ($row = mysqli_fetch_assoc($query)) : ?>
-            <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl
-            transform transition duration-300 hover:scale-110">
+            <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl transform transition duration-300 hover:scale-110">
                 <a class="flex flex-col items-center justify-center">
                     <img src="assets/<?= $row['icon_item']; ?>"
                         alt="<?= $row['nama_item']; ?>"
@@ -61,6 +106,7 @@
             </div>
         <?php endwhile; ?>
     </div>
+
     <div class="translate-y-[-500px] translate-x-[1100px]">
         <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-140">
     </div>

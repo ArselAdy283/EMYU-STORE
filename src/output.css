@@ -12,6 +12,7 @@
     --color-red-600: oklch(57.7% 0.245 27.325);
     --color-red-800: oklch(44.4% 0.177 26.899);
     --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-yellow-500: oklch(79.5% 0.184 86.047);
     --color-green-400: oklch(79.2% 0.209 151.711);
     --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-gray-500: oklch(55.1% 0.027 264.364);
@@ -387,6 +388,14 @@
   .border-collapse {
     border-collapse: collapse;
   }
+  .translate-x-\[-5px\] {
+    --tw-translate-x: -5px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-x-\[-10px\] {
+    --tw-translate-x: -10px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
   .translate-x-\[-20px\] {
     --tw-translate-x: -20px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -407,8 +416,20 @@
     --tw-translate-x: -500px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
+  .translate-x-\[-px\] {
+    --tw-translate-x: -px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-x-\[0px\] {
+    --tw-translate-x: 0px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
   .translate-x-\[10px\] {
     --tw-translate-x: 10px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-x-\[90px\] {
+    --tw-translate-x: 90px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-x-\[103px\] {
@@ -435,6 +456,10 @@
     --tw-translate-x: 1100px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
+  .translate-x-\[px\] {
+    --tw-translate-x: px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
   .translate-y-\[-50px\] {
     --tw-translate-y: -50px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -457,10 +482,6 @@
   }
   .translate-y-\[20px\] {
     --tw-translate-y: 20px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .translate-y-\[30px\] {
-    --tw-translate-y: 30px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-y-\[50px\] {
@@ -711,9 +732,6 @@
   }
   .text-blue-400 {
     color: var(--color-blue-400);
-  }
-  .text-green-400 {
-    color: var(--color-green-400);
   }
   .text-red-400 {
     color: var(--color-red-400);
