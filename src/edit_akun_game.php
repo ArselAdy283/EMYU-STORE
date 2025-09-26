@@ -57,7 +57,8 @@ if (isset($_POST['edit_akun_game'])) {
         </div>
         <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
 
-        <button type="submit" name="hapus_akun_game" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</button>
+        <a href="hapus_akun_game.php?id=<?= $old['id_akun_game'] ?>"
+            onclick="return confirm('Yakin mau hapus akun ini?')" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</a>
 
     <?php elseif ($game == 'ff') : ?>
         <h2 class="text-xl font-semibold mb-2">ID AKUN</h2>
@@ -67,7 +68,8 @@ if (isset($_POST['edit_akun_game'])) {
 
         <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
 
-        <button type="submit" name="hapus_akun_game" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</button>
+        <a href="hapus_akun_game.php?id=<?= $old['id_akun_game'] ?>"
+            onclick="return confirm('Yakin mau hapus akun ini?')" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</a>
 
     <?php elseif ($game == 'efootball') : ?>
         <h2 class="text-xl font-semibold mb-2">USERNAME</h2>
@@ -77,7 +79,8 @@ if (isset($_POST['edit_akun_game'])) {
 
         <button type="submit" name="edit_akun_game" class="bg-[#ffed00] text-black font-bold px-8 py-3 rounded-2xl hover:bg-yellow-400 transition">SIMPAN</button>
 
-        <button type="submit" name="hapus_akun_game" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</button>
+        <a href="hapus_akun_game.php?id=<?= $old['id_akun_game'] ?>"
+            onclick="return confirm('Yakin mau hapus akun ini?')" class="bg-red-500 text-black font-bold px-8 py-3 rounded-2xl hover:bg-red-700 transition">HAPUS</a>
     <?php else : ?>
         <p class="text-red-400">Pilih game dari daftar terlebih dahulu.</p>
     <?php endif; ?>
