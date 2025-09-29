@@ -9,7 +9,7 @@ $game = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $query = mysqli_query(
     $koneksi,
-    "SELECT g.id_game, g.nama_game, g.icon_game, 
+    "SELECT g.id_game, g.nama_game, g.icon_game, i.id_item, 
             i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
      FROM games g
      JOIN items i ON g.id_game = i.id_game
@@ -94,7 +94,7 @@ if ($id_user) {
         mysqli_data_seek($query, 0);
         while ($row = mysqli_fetch_assoc($query)) : ?>
             <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl transform transition duration-300 hover:scale-110">
-                <a class="flex flex-col items-center justify-center">
+                <a href="pembayaran.php?id_item=<?= $row['id_item']; ?>" class="flex flex-col items-center justify-center">
                     <img src="assets/<?= $row['icon_item']; ?>"
                         alt="<?= $row['nama_item']; ?>"
                         class="w-35 h-35 mb-2">
@@ -110,6 +110,7 @@ if ($id_user) {
     <div class="translate-y-[-500px] translate-x-[1100px]">
         <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-140">
     </div>
+    <script src="/src/script.js"></script>
 </body>
 
 </html>
