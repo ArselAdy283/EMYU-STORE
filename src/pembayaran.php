@@ -60,7 +60,7 @@ if (!isset($_SESSION['username'])) {
             <div class="flex flex-col items-center w-full md:w-1/2 text-center md:text-left translate-y-[-50px]">
                 <img src="assets/<?= $item['icon_item']; ?>" alt="<?= $item['nama_item']; ?>" class="w-60 h-60">
                 <h2 class="text-xl font-semibold"><?= $item['jumlah_item']; ?> <?= $item['nama_item']; ?></h2>
-                <p class="text-lg">Rp <?= number_format($item['harga_item']); ?></p>
+                <p class="text-lg">IDR <?= number_format($item['harga_item']); ?></p>
             </div>
 
             <!-- Garis pemisah -->

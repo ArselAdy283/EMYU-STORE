@@ -94,15 +94,28 @@ if ($id_user) {
         mysqli_data_seek($query, 0);
         while ($row = mysqli_fetch_assoc($query)) : ?>
             <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl transform transition duration-300 hover:scale-110">
-                <a href="pembayaran.php?id_item=<?= $row['id_item']; ?>" class="flex flex-col items-center justify-center">
-                    <img src="assets/<?= $row['icon_item']; ?>"
-                        alt="<?= $row['nama_item']; ?>"
-                        class="w-35 h-35 mb-2">
-                    <p class="text-white text-sm font-semibold">
-                        <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
-                    </p>
-                    <p class="text-white text-xs">Rp <?= number_format($row['harga_item']); ?></p>
-                </a>
+                <?php if ($id_user): ?>
+                    <!-- Sudah login -->
+                    <a href="pembayaran.php?id_item=<?= $row['id_item']; ?>"
+                        class="flex flex-col items-center justify-center item-link"
+                        data-item="<?= $row['id_item']; ?>">
+                        <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-35 h-35 mb-2">
+                        <p class="text-white text-sm font-semibold">
+                            <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
+                        </p>
+                        <p class="text-white text-xs">IDR <?= number_format($row['harga_item']); ?></p>
+                    </a>
+                <?php else: ?>
+                    <!-- Belum login -->
+                    <a href="login.php"
+                        class="flex flex-col items-center justify-center item-link">
+                        <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-35 h-35 mb-2">
+                        <p class="text-white text-sm font-semibold">
+                            <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
+                        </p>
+                        <p class="text-white text-xs">IDR <?= number_format($row['harga_item']); ?></p>
+                    </a>
+                <?php endif; ?>
             </div>
         <?php endwhile; ?>
     </div>
@@ -110,7 +123,9 @@ if ($id_user) {
     <div class="translate-y-[-500px] translate-x-[1100px]">
         <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-140">
     </div>
-    <script src="/src/script.js"></script>
+    <?php if ($id_user): ?>
+        <script src="script.js"></script>
+    <?php endif; ?>
 </body>
 
 </html>
