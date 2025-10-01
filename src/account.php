@@ -16,7 +16,7 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="min-h-screen bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] font-sans text-white">
+<body class="overflow-x-hidden overflow-y-scroll min-h-screen bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] font-sans text-white">
     <?php
 
     include 'navbar.php';
@@ -68,8 +68,8 @@ if (!isset($_SESSION['username'])) {
             </div>
         </section>
         <!-- SETTING POPUP -->
-        <div id="settingPopup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
-            <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
+        <div id="settingPopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
                 <button onclick="document.getElementById('settingPopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
 
@@ -78,8 +78,8 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <!-- AKUN GAME POPUP -->
-        <div id="akunGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
-            <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
+        <div id="akunGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
                 <button onclick="document.getElementById('akunGamePopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
 
@@ -88,8 +88,8 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <!-- INPUT ID GAME POPUP -->
-        <div id="idGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-175px] translate-y-[56px]">
-            <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[670px] h-[445px] p-6 relative">
+        <div id="idGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
                 <button onclick="document.getElementById('idGamePopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
 

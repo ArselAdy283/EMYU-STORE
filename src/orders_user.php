@@ -12,7 +12,8 @@ $id_user = $_SESSION['id_user'];
 // ambil data order user
 $stmt = $koneksi->prepare("
     SELECT o.id_order, o.tanggal, o.status,
-           i.nama_item, i.jumlah_item, i.harga_item, g.nama_game
+           i.nama_item, i.jumlah_item, i.harga_item, i.icon_item,
+           g.nama_game, g.icon_game
     FROM orders o
     JOIN items i ON o.id_item = i.id_item
     JOIN games g ON i.id_game = g.id_game
@@ -24,22 +25,59 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<h1>Daftar Order Saya</h1>
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Tanggal</th>
-        <th>Game</th>
-        <th>Item</th>
-        <th>Harga</th>
-        <th>Status</th>
-    </tr>
-    <?php while ($row = $result->fetch_assoc()): ?>
-        <tr>
-            <td><?= $row['tanggal'] ?></td>
-            <td><?= $row['nama_game'] ?></td>
-            <td><?= $row['jumlah_item'] ?> <?= $row['nama_item'] ?></td>
-            <td><?= number_format($row['harga_item']) ?></td>
-            <td><?= $row['status'] ?></td>
-        </tr>
-    <?php endwhile; ?>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMYUSTORE</title>
+    <link href="./output.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
+    <?php
+    include 'navbar.php';
+    ?>
+
+    <div class="overflow-x-auto max-w-5xl mx-auto px-4 pb-12">
+        <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
+            <thead class="bg-red-700 text-white uppercase text-base">
+                <tr>
+                    <th class="px-6 py-4">Tanggal</th>
+                    <th class="px-6 py-4">Game</th>
+                    <th class="px-6 py-4">Item</th>
+                    <th class="px-6 py-4">Harga</th>
+                    <th class="px-6 py-4">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr class="odd:bg-[color:#171717] even:bg-[color:#333333] hover:bg-red-600/60 transition">
+                        <td class="px-6 py-10"><?= $row['tanggal'] ?></td>
+                        <td class="px-6 py-10 font-semibold">
+                            <img src="assets/<?= $row['icon_game'] ?> " alt="<?= $row['nama_game']?>" class="w-[10%] h-[10%]">
+                            <?= $row['nama_game'] ?>
+                        </td>
+                        <td class="px-6 py-10"><?= $row['jumlah_item'] ?> <?= $row['nama_item'] ?></td>
+                        <td class="px-6 py-10 text-yellow-400 font-bold">IDR <?= number_format($row['harga_item']) ?></td>
+                        <td class="px-6 py-10">
+                            <?php if ($row['status'] === 'Selesai'): ?>
+                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Selesai</span>
+                            <?php elseif ($row['status'] === 'Pending'): ?>
+                                <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                            <?php else: ?>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= $row['status'] ?></span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

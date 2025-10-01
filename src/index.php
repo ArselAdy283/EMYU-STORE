@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
+<body class="overflow-x-hidden overflow-y-scroll bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
 
     <!-- Navbar -->
-    <nav class="flex justify-between items-center px-8 py-5">
+    <nav id="navbar" class="flex justify-between items-center px-8 py-5 
+            sticky top-0 z-50 transition-all duration-500 bg-transparent">
         <!-- Logo Game -->
         <div class="flex items-center space-x-8 h-[50px]">
             <img src="assets/efootball.png" alt="Efootball" class="h-[80px]">
@@ -47,7 +48,7 @@
             </button>
         </div>
     </section>
-
+    <script src="script.js"></script>
 </body>
 
 </html>

@@ -16,7 +16,7 @@ include 'koneksi.php';
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] min-h-screen text-white">
+<body class="overflow-x-hidden overflow-y-scroll bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] min-h-screen text-white">
   <?php include 'navbar.php'; ?>
 
   <!-- Judul -->
