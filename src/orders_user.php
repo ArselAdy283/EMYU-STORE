@@ -55,13 +55,26 @@ $result = $stmt->get_result();
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr class="odd:bg-[color:#171717] even:bg-[color:#333333] hover:bg-red-600/60 transition">
-                        <td class="px-6 py-10"><?= $row['tanggal'] ?></td>
+                        <td class="px-6 py-10"><?= $row['tanggal']; ?></td>
                         <td class="px-6 py-10 font-semibold">
-                            <img src="assets/<?= $row['icon_game'] ?> " alt="<?= $row['nama_game']?>" class="w-[10%] h-[10%]">
-                            <?= $row['nama_game'] ?>
+                            <div class="flex items-center gap-4">
+                                <img src="assets/<?= $row['icon_game']; ?> " alt="<?= $row['nama_game']; ?>" class="w-[20%] h-[20%]">
+                                <?= $row['nama_game']; ?>
+                            </div>
                         </td>
-                        <td class="px-6 py-10"><?= $row['jumlah_item'] ?> <?= $row['nama_item'] ?></td>
-                        <td class="px-6 py-10 text-yellow-400 font-bold">IDR <?= number_format($row['harga_item']) ?></td>
+                        <td class="px-6 py-10">
+                            <div class="flex items-center gap-4">
+                                <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_game']; ?>" class="w-[40%] h-[40%]">
+                                <?= $row['jumlah_item']; ?>
+                                <?= $row['nama_item']; ?>
+                            </div>
+                        </td>
+                        <td class="px-6 py-10 text-yellow-400 font-bold">
+                            <div class="flex gap-2">
+                                <span>IDR</span>
+                                <span><?= number_format($row['harga_item']) ?></span>
+                            </div>
+                        </td>
                         <td class="px-6 py-10">
                             <?php if ($row['status'] === 'Selesai'): ?>
                                 <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Selesai</span>

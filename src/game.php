@@ -124,7 +124,7 @@ if ($id_user) {
         <!-- MODAL PEMABAYARAN  -->
     </div>
     <div id="pembayaranPopup"
-        class="hidden fixed inset-0 flex items-center justify-center bg-black/80 bg-opacity-50 z-50">
+        class="hidden fixed inset-0 items-center justify-center bg-black/80 bg-opacity-50 z-50">
         <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
             <button onclick="document.getElementById('pembayaranPopup').classList.add('hidden')"
                 class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
