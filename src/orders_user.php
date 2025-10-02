@@ -43,7 +43,7 @@ $result = $stmt->get_result();
 
     <div class="overflow-x-auto max-w-5xl mx-auto px-4 pb-12">
         <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
-            <thead class="bg-red-700 text-white uppercase text-base">
+            <thead class="bg-red-700 text-white text-center uppercase text-base">
                 <tr>
                     <th class="px-6 py-4">Tanggal</th>
                     <th class="px-6 py-4">Game</th>

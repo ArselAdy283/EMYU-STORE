@@ -30,14 +30,11 @@
         </ul>
     </nav>
 
-    <!-- Hero Section -->
     <section class="h-screen flex items-center justify-between px-12">
-        <!-- Character Image -->
         <div class="flex-shrink-0 mt-90 translate-x-[-100px]">
             <img src="assets/hero.webp" alt="Hero" class="w-[600px] transform scale-x-[-1] brightness-140">
         </div>
 
-        <!-- Content -->
         <div class="w-1/3 text-left translate-x-[-200px] translate-y-[-100px]">
             <h1 class="text-[70px] font-extrabold text-[color:#ffed00]">EMYUSTORE</h1>
             <p class="text-white mt-4 max-w-md">

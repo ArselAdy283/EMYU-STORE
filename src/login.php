@@ -27,7 +27,7 @@ include 'koneksi.php';
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $koneksi->prepare("SELECT id_user, password, display_name FROM users WHERE username = ?");
+    $stmt = $koneksi->prepare("SELECT id_user, password, display_name, role FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -38,6 +38,7 @@ include 'koneksi.php';
       $_SESSION['id_user'] = $user['id_user'];
       $_SESSION['username'] = $username;
       $_SESSION['display_name'] = $user['display_name'];
+      $_SESSION['role'] = $user['role'];
       header('Location: account.php');
       exit;
     } else {

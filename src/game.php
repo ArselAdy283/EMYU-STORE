@@ -49,11 +49,11 @@ if ($id_user) {
                 <h1 class="text-2xl font-bold"><?= $dataGame['nama_game']; ?></h1>
             </div>
         </div>
-    
+
         <!-- FORM INPUT -->
         <form method="POST" action="edit_akun_game.php?game=<?= strtolower($dataGame['nama_game']); ?>"
             class="flex flex-col gap-4 w-[500px] translate-x-[103px] mb-[25px]">
-    
+
             <?php if ($game == 1): // MLBB 
             ?>
                 <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
@@ -61,13 +61,13 @@ if ($id_user) {
                         placeholder="ID AKUN"
                         value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
                         class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
-    
+
                     <input type="tel" name="id_zona_game"
                         placeholder="ID ZONA"
                         value="<?= htmlspecialchars($akun['id_zona_game'] ?? '') ?>"
                         class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white">
                 </div>
-    
+
             <?php elseif ($game == 2): // Efootball 
             ?>
                 <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
@@ -76,7 +76,7 @@ if ($id_user) {
                         value="<?= htmlspecialchars($akun['username_akun'] ?? '') ?>"
                         class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
                 </div>
-    
+
             <?php elseif ($game == 3): // Free Fire 
             ?>
                 <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
@@ -85,10 +85,10 @@ if ($id_user) {
                         value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
                         class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
                 </div>
-    
+
             <?php endif; ?>
         </form>
-    
+
         <!-- LIST ITEM -->
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px]">
             <?php
@@ -120,11 +120,11 @@ if ($id_user) {
                 </div>
             <?php endwhile; ?>
         </div>
-    
+
         <!-- MODAL PEMABAYARAN  -->
     </div>
     <div id="pembayaranPopup"
-        class="hidden fixed inset-0 items-center justify-center bg-black/80 bg-opacity-50 z-50">
+        class="hidden fixed inset-0 flex items-center justify-center bg-black/80 z-50">
         <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
             <button onclick="document.getElementById('pembayaranPopup').classList.add('hidden')"
                 class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
@@ -132,9 +132,19 @@ if ($id_user) {
             <div id="pembayaranPopupContent"></div>
         </div>
     </div>
-
     <script>
         function pembayaranPopup(item) {
+            let idAkun = document.querySelector("input[name='id_akun_game']");
+            let idZona = document.querySelector("input[name='id_zona_game']");
+            let username = document.querySelector("input[name='username_efootball']");
+
+            if ((idAkun && idAkun.value.trim() === "") ||
+                (idZona && idZona.required && idZona.value.trim() === "") ||
+                (username && username.value.trim() === "")) {
+                alert("Harap isi data akun terlebih dahulu!");
+                return;
+            }
+
             fetch("pembayaran.php?id_item=" + item)
                 .then(res => res.text())
                 .then(html => {
@@ -143,6 +153,7 @@ if ($id_user) {
                 });
         }
     </script>
+
 </body>
 
 </html>

@@ -58,7 +58,23 @@ if (!isset($_SESSION['username'])) {
                         <div class="mt-1 text-lg">Akun Game</div>
                     </button>
 
-                    <div class="col-span-3 flex justify-center mt-2">
+                    <?php if ($_SESSION['role'] === 'admin'): ?>
+                        <div class="flex justify-start mt-2 translate-x-[68px]">
+                            <a href="admin.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
+                                <img src="assets/code.svg" alt="admin" class="w-14 h-14 invert">
+                                <div class="mt-1 text-lg">Admin</div>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['role'] === 'user'): ?>
+                        <div class="flex justify-start mt-2 translate-x-[68px]">
+                            <div class="flex flex-col items-center">
+                                <div class="w-14 h-14 invert"></div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="flex justify-center mt-2 col-span-2 translate-x-[-103px]">
                         <a href="logout.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
                             <img src="assets/sign-out.svg" alt="logout" class="w-14 h-14 invert">
                             <div class="mt-1 text-lg">Logout</div>
