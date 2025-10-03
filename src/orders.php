@@ -9,7 +9,6 @@ if (!isset($_SESSION['id_user'])) {
 
 $id_user = $_SESSION['id_user'];
 
-// ambil data order user
 $stmt = $koneksi->prepare("
     SELECT o.id_order, o.tanggal, o.status,
            i.nama_item, i.jumlah_item, i.harga_item, i.icon_item,

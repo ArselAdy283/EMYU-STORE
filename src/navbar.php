@@ -8,10 +8,10 @@
     </div>
 
     <!-- Menu -->
-    <ul class="flex space-x-8 text-xl font-semibold">
+    <ul class="flex space-x-8 text-xl font-semibold text-white">
         <li><a href="index.php" class="hover:text-[#ffed00] transition">Home</a></li>
-        <li><a href="orders_user.php" class="hover:text-[#ffed00] transition">Orders</a></li>
-        <li><a href="#" class="text-[#ffed00]">Social</a></li>
+        <li><a href="orders.php" class="hover:text-[#ffed00] transition">Orders</a></li>
+        <li><a href="#" class="text-[#ffed00]">Inbox</a></li>
         <li><a href="account.php" class="hover:text-[#ffed00] transition">Account</a></li>
     </ul>
 </nav>
