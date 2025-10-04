@@ -20,7 +20,7 @@ $stmt = $koneksi->prepare("INSERT INTO orders (id_user, id_item, status) VALUES 
 $stmt->bind_param("ii", $id_user, $id_item);
 
 if ($stmt->execute()) {
-    header("Location: orders_user.php");
+    header("Location: orders.php");
     exit;
 } else {
     echo "Gagal menyimpan order: " . $stmt->error;

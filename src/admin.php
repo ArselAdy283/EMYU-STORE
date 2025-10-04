@@ -1,3 +1,13 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+if (!isset($_SESSION['id_user'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,9 +69,9 @@
   <div class="flex">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-[color:#18181c] h-[calc(100vh-90px)] sticky top-[80px] flex flex-col">
+    <aside class="fixed left-0 top-[80px] w-64 bg-[color:#18181c] h-[calc(100vh-80px)] flex flex-col">
       <div class="p-6 text-2xl font-bold text-[#db2525] border-b border-gray-700">
-        Admin Dashboard
+        <a href="admin.php">Dashboard</a>
       </div>
       <nav class="flex-1 p-4 space-y-4">
         <a href="admin.php?page=order" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Order</a>
@@ -70,37 +80,125 @@
         <a href="admin.php?page=user" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">User</a>
       </nav>
       <div class="p-4 border-t border-gray-700">
-        <button class="w-full py-2 bg-[#db2525] rounded-lg hover:bg-red-700 transition">
+        <button class="w-full py-2 bg-[#db2525] rounded-lg hover:bg-red-700 transition" onclick="window.location.href='logout.php'">
           Logout
         </button>
       </div>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 p-8">
-      <header class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold">Dashboard</h1>
-        <div class="flex space-x-4">
-          <div class="px-4 py-2 bg-[#18181c] rounded-lg">CPU Load: 8%</div>
-          <div class="px-4 py-2 bg-[#18181c] rounded-lg">Memory: 1.9 / 6 GB</div>
-        </div>
-      </header>
+    <main class="flex-1 p-8 ml-64">
+      <?php
+      $page = $_GET['page'] ?? 'dashboard'; ?>
 
-      <!-- Example Content -->
-      <section class="grid grid-cols-3 gap-6">
-        <div class="bg-[#18181c] rounded-xl shadow p-6">
-          <h2 class="text-xl font-semibold mb-2">Total Orders</h2>
-          <p class="text-3xl font-bold text-[#db2525]">120</p>
-        </div>
-        <div class="bg-[#18181c] rounded-xl shadow p-6">
-          <h2 class="text-xl font-semibold mb-2">Total Items</h2>
-          <p class="text-3xl font-bold text-[#db2525]">58</p>
-        </div>
-        <div class="bg-[#18181c] rounded-xl shadow p-6">
-          <h2 class="text-xl font-semibold mb-2">Total Users</h2>
-          <p class="text-3xl font-bold text-[#db2525]">340</p>
-        </div>
-      </section>
+      <?php if ($page === 'order'): ?>
+        <header class="flex justify-between items-center mb-8">
+          <h1 class="text-3xl font-bold">Orders</h1>
+        </header>
+
+        <section class="grid grid-cols-3 gap-6">
+          <div class="bg-[#18181c] rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-2">Total Orders</h2>
+            <p class="text-3xl font-bold text-[#db2525]">120</p>
+          </div>
+          <div class="bg-[#18181c] rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-2">Total Items</h2>
+            <p class="text-3xl font-bold text-[#db2525]">58</p>
+          </div>
+          <div class="bg-[#18181c] rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-2">Total Users</h2>
+            <p class="text-3xl font-bold text-[#db2525]">340</p>
+          </div>
+        </section>
+
+        <?php
+
+        $id_user = $_SESSION['id_user'];
+
+        $stmt = $koneksi->prepare("
+        SELECT o.id_order, o.tanggal, o.status,
+        i.nama_item, i.jumlah_item, i.harga_item, i.icon_item,
+        g.nama_game, g.icon_game
+        FROM orders o
+        JOIN items i ON o.id_item = i.id_item
+        JOIN games g ON i.id_game = g.id_game
+        WHERE o.id_user = ?
+        ORDER BY o.tanggal DESC
+        ");
+        $stmt->bind_param("i", $id_user);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        ?>
+
+        <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden translate-y-[100px]">
+          <thead class="bg-red-700 text-white text-center uppercase text-base">
+            <tr>
+              <th class="px-6 py-4">Tanggal</th>
+              <th class="px-6 py-4">Game</th>
+              <th class="px-6 py-4">Item</th>
+              <th class="px-6 py-4">Harga</th>
+              <th class="px-6 py-4">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php while ($row = $result->fetch_assoc()): ?>
+              <tr class="odd:bg-[color:#171717] even:bg-[color:#333333] hover:bg-red-600/60 transition">
+                <td class="px-6 py-10"><?= $row['tanggal']; ?></td>
+                <td class="px-6 py-10 font-semibold">
+                  <div class="flex items-center gap-4">
+                    <img src="assets/<?= $row['icon_game']; ?> " alt="<?= $row['nama_game']; ?>" class="w-[20%] h-[20%]">
+                    <?= $row['nama_game']; ?>
+                  </div>
+                </td>
+                <td class="px-6 py-10">
+                  <div class="flex items-center gap-4">
+                    <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_game']; ?>" class="w-[40%] h-[40%]">
+                    <?= $row['jumlah_item']; ?>
+                    <?= $row['nama_item']; ?>
+                  </div>
+                </td>
+                <td class="px-6 py-10 text-yellow-400 font-bold">
+                  <div class="flex gap-2">
+                    <span>IDR</span>
+                    <span><?= number_format($row['harga_item']) ?></span>
+                  </div>
+                </td>
+                <td class="px-6 py-10">
+                  <?php if ($row['status'] === 'Selesai'): ?>
+                    <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Selesai</span>
+                  <?php elseif ($row['status'] === 'Pending'): ?>
+                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                  <?php else: ?>
+                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= $row['status'] ?></span>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+
+      <?php elseif ($page === 'item'): ?>
+        <h1 class='text-3xl font-bold mb-4'>📦 Item</h1>
+        <p>Manajemen item ada di sini...</p>
+
+      <?php elseif ($page === 'pengumuman'): ?>
+        <h1 class='text-3xl font-bold mb-4'>📢 Pengumuman</h1>
+        <p>Tulis dan kelola pengumuman di sini...</p>
+
+      <?php elseif ($page === 'inbox'): ?>
+        <h1 class='text-3xl font-bold mb-4'>💻 Inbox</h1>
+        <p>Kelola data user di sini...</p>
+
+      <?php elseif ($page === 'user'): ?>
+        <h1 class='text-3xl font-bold mb-4'>👤 User</h1>
+        <p>Kelola data user di sini...</p>
+
+      <?php else: ?>
+        <h1 class='text-3xl font-bold mb-4'>📊 Dashboard</h1>
+        <p>Selamat datang di Admin Dashboard.</p>
+      <?php endif ?>
+
     </main>
 
   </div>

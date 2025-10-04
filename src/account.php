@@ -42,9 +42,9 @@ if (!isset($_SESSION['username'])) {
 
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 rounded-2xl p-8 shadow-2xl">
                 <div class="grid grid-cols-3 gap-6 text-white text-center">
-                    <a href="order.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
+                    <a href="orders.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
                         <img src="assets/tray.svg" alt="history" class="w-14 h-14 invert">
-                        <div class="mt-1 text-lg">Order</div>
+                        <div class="mt-1 text-lg">Orders</div>
                     </a>
 
                     <button onclick="document.getElementById('settingPopup').classList.remove('hidden')"
@@ -60,7 +60,7 @@ if (!isset($_SESSION['username'])) {
 
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <div class="flex justify-start mt-2 translate-x-[68px]">
-                            <a href="admin.php?page=order" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
+                            <a href="admin.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
                                 <img src="assets/code.svg" alt="admin" class="w-14 h-14 invert">
                                 <div class="mt-1 text-lg">Admin</div>
                             </a>
