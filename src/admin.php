@@ -3,8 +3,8 @@ session_start();
 include 'koneksi.php';
 
 if (!isset($_SESSION['id_user'])) {
-    header('Location: login.php');
-    exit;
+  header('Location: login.php');
+  exit;
 }
 ?>
 
@@ -43,6 +43,16 @@ if (!isset($_SESSION['id_user'])) {
       background-attachment: fixed;
       min-height: 100vh;
       color: white;
+    }
+    
+    /* Tambahkan style untuk table container */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 30px;
+    }
+    
+    table {
+      min-width: 800px;
     }
   </style>
 </head>
@@ -112,79 +122,101 @@ if (!isset($_SESSION['id_user'])) {
         </section>
 
         <?php
+        $filter = $_GET['filter'] ?? 'all';
 
-        $id_user = $_SESSION['id_user'];
+        $query = "
+          SELECT o.id_order, o.tanggal, o.status,
+                u.username,
+                i.nama_item, i.jumlah_item, i.harga_item, i.icon_item,
+                g.nama_game, g.icon_game
+          FROM orders o
+          JOIN users u ON o.id_user = u.id_user
+          JOIN items i ON o.id_item = i.id_item
+          JOIN games g ON i.id_game = g.id_game";
 
-        $stmt = $koneksi->prepare("
-        SELECT o.id_order, o.tanggal, o.status,
-        i.nama_item, i.jumlah_item, i.harga_item, i.icon_item,
-        g.nama_game, g.icon_game
-        FROM orders o
-        JOIN items i ON o.id_item = i.id_item
-        JOIN games g ON i.id_game = g.id_game
-        WHERE o.id_user = ?
-        ORDER BY o.tanggal DESC
-        ");
-        $stmt->bind_param("i", $id_user);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        if ($filter === 'pending') {
+          $query .= " WHERE o.status = 'pending'";
+        } elseif ($filter === 'done') {
+          $query .= " WHERE o.status = 'done'";
+        }
+
+        $query .= " ORDER BY o.tanggal DESC";
+
+        $result = $koneksi->query($query);
 
         ?>
 
-        <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden translate-y-[100px]">
-          <thead class="bg-red-700 text-white text-center uppercase text-base">
-            <tr>
-              <th class="px-6 py-4">Tanggal</th>
-              <th class="px-6 py-4">Game</th>
-              <th class="px-6 py-4">Item</th>
-              <th class="px-6 py-4">Harga</th>
-              <th class="px-6 py-4">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while ($row = $result->fetch_assoc()): ?>
-              <tr class="odd:bg-[color:#171717] even:bg-[color:#333333] hover:bg-red-600/60 transition">
-                <td class="px-6 py-10"><?= $row['tanggal']; ?></td>
-                <td class="px-6 py-10 font-semibold">
-                  <div class="flex items-center gap-4">
-                    <img src="assets/<?= $row['icon_game']; ?> " alt="<?= $row['nama_game']; ?>" class="w-[20%] h-[20%]">
-                    <?= $row['nama_game']; ?>
-                  </div>
-                </td>
-                <td class="px-6 py-10">
-                  <div class="flex items-center gap-4">
-                    <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_game']; ?>" class="w-[40%] h-[40%]">
-                    <?= $row['jumlah_item']; ?>
-                    <?= $row['nama_item']; ?>
-                  </div>
-                </td>
-                <td class="px-6 py-10 text-yellow-400 font-bold">
-                  <div class="flex gap-2">
-                    <span>IDR</span>
-                    <span><?= number_format($row['harga_item']) ?></span>
-                  </div>
-                </td>
-                <td class="px-6 py-10">
-                  <?php if ($row['status'] === 'Selesai'): ?>
-                    <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Selesai</span>
-                  <?php elseif ($row['status'] === 'Pending'): ?>
-                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">Pending</span>
-                  <?php else: ?>
-                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= $row['status'] ?></span>
-                  <?php endif; ?>
-                </td>
+        <div class="mb-6 flex gap-4">
+          <a href="admin.php?page=order&filter=all" class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">Semua</a>
+          <a href="admin.php?page=order&filter=pending" class="px-4 py-2 rounded-lg bg-yellow-600 hover:bg-yellow-500">Pending</a>
+          <a href="admin.php?page=order&filter=done" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500">Done</a>
+        </div>
+
+        <!-- Tambahkan container untuk table -->
+        <div class="table-container">
+          <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
+            <thead class="bg-red-700 text-white text-center uppercase text-base">
+              <tr>
+                <th class="px-4 py-3">Tanggal</th>
+                <th class="px-4 py-3">Game</th>
+                <th class="px-4 py-3">Item</th>
+                <th class="px-4 py-3">Harga</th>
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3">Aksi</th>
               </tr>
-            <?php endwhile; ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php while ($row = $result->fetch_assoc()): ?>
+                <tr class="odd:bg-[color:#171717] even:bg-[color:#333333] hover:bg-red-600/60 transition">
+                  <td class="px-4 py-4"><?= $row['tanggal']; ?></td>
+                  <td class="px-4 py-4 font-semibold">
+                    <div class="flex items-center gap-3">
+                      <img src="assets/<?= $row['icon_game']; ?>" alt="<?= $row['nama_game']; ?>" class="w-8 h-8">
+                      <span><?= $row['nama_game']; ?></span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-4">
+                    <div class="flex items-center gap-3">
+                      <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-8 h-8">
+                      <span><?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?></span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-4 text-yellow-400 font-bold">
+                    <div class="flex gap-2">
+                      <span>IDR</span>
+                      <span><?= number_format($row['harga_item']) ?></span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-4">
+                    <?php if ($row['status'] === 'done'): ?>
+                      <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Done</span>
+                    <?php elseif ($row['status'] === 'pending'): ?>
+                      <span class="bg-red-600 text-black px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                    <?php else: ?>
+                      <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= $row['status'] ?></span>
+                    <?php endif; ?>
+                  </td>
+                  <td class="px-4 py-4 text-center">
+                    <?php if ($row['status'] === 'pending'): ?>
+                      <form method="post" action="update_order.php" class="inline">
+                        <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
+                        <button type="submit" class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition">
+                          Selesai
+                        </button>
+                      </form>
+                    <?php else: ?>
+                      <span class="text-gray-400 text-sm">Tidak ada aksi</span>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
 
       <?php elseif ($page === 'item'): ?>
         <h1 class='text-3xl font-bold mb-4'>📦 Item</h1>
         <p>Manajemen item ada di sini...</p>
-
-      <?php elseif ($page === 'pengumuman'): ?>
-        <h1 class='text-3xl font-bold mb-4'>📢 Pengumuman</h1>
-        <p>Tulis dan kelola pengumuman di sini...</p>
 
       <?php elseif ($page === 'inbox'): ?>
         <h1 class='text-3xl font-bold mb-4'>💻 Inbox</h1>

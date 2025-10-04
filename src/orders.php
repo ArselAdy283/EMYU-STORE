@@ -75,10 +75,10 @@ $result = $stmt->get_result();
                             </div>
                         </td>
                         <td class="px-6 py-10">
-                            <?php if ($row['status'] === 'Selesai'): ?>
-                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Selesai</span>
-                            <?php elseif ($row['status'] === 'Pending'): ?>
-                                <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                            <?php if ($row['status'] === 'done'): ?>
+                                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">done</span>
+                            <?php elseif ($row['status'] === 'pending'): ?>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">pending</span>
                             <?php else: ?>
                                 <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= $row['status'] ?></span>
                             <?php endif; ?>
