@@ -104,7 +104,7 @@ if ($id_user) {
                             <p class="text-white text-sm font-semibold">
                                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                             </p>
-                            <p class="text-white text-xs">IDR <?= number_format($row['harga_item']); ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item']); ?></p>
                         </button>
                     <?php else: ?>
                         <!-- Belum login -->
@@ -114,7 +114,7 @@ if ($id_user) {
                             <p class="text-white text-sm font-semibold">
                                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                             </p>
-                            <p class="text-white text-xs">IDR <?= number_format($row['harga_item']); ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item']); ?></p>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -145,7 +145,16 @@ if ($id_user) {
                 return;
             }
 
-            fetch("pembayaran.php?id_item=" + item)
+            let data = new FormData();
+            data.append("id_item", item);
+            if (idAkun) data.append("id_akun_game", idAkun.value);
+            if (idZona) data.append("id_zona_game", idZona.value);
+            if (username) data.append("username_akun", username.value);
+
+            fetch("pembayaran.php", {
+                    method: "POST",
+                    body: data
+                })
                 .then(res => res.text())
                 .then(html => {
                     document.getElementById("pembayaranPopupContent").innerHTML = html;
