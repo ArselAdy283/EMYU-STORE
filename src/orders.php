@@ -36,7 +36,7 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
+<body class="overflow-x-hidden overflow-y-scroll bg-gradient-to-tr from-[color:#ff392c] via-black to-[color:#ff392c] min-h-screen text-white">
     <?php
     include 'navbar.php';
     ?>

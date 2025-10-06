@@ -25,7 +25,7 @@
         <ul class="flex space-x-8 text-xl font-semibold">
             <li><a href="index.php" class="transform transition duration-300 hover:text-[color:#ffed00]">Home</a></li>
             <li><a href="orders.php" class="transform transition duration-500 hover:text-[color:#ffed00]">Orders</a></li>
-            <li><a href="#" class="transform transition duration-500 text-[color:#ffed00]">Inbox</a></li>
+            <li><a href="inbox.php" class="transform transition duration-500 text-[color:#ffed00]">Inbox</a></li>
             <li><a href="account.php" class="transform transition duration-500 hover:text-[color:#ffed00]">Account</a></li>
         </ul>
     </nav>
@@ -45,6 +45,44 @@
             </button>
         </div>
     </section>
+    <section class="mt-[500px]">
+        <h1 class="text-center text-[50px] font-extrabold text-[color:#ffed00] mb-9">GAME POPULER</h1>
+        <div class="flex items-center justify-center gap-9">
+            <!-- Card MLBB -->
+            <div class="relative group w-[250px] h-[500px] rounded-[10px] overflow-hidden shadow-lg">
+                <img src="assets/mlbb-banner.webp" alt="mlbb" class="w-full h-full object-cover transition duration-500 group-hover:brightness-50">
+                <div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                    <img src="assets/mlbb.png" alt="mlbb logo" class="h-[200px] mb-4">
+                </div>
+            </div>
+
+            <!-- Card eFootball -->
+            <div class="relative group w-[250px] h-[500px] rounded-[10px] overflow-hidden shadow-lg">
+                <img src="assets/efootball-banner.jpg" alt="ef" class="w-full h-full object-cover transition duration-500 group-hover:brightness-50">
+                <div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                    <img src="assets/efootball.png" alt="ef logo" class="h-[150px] mb-4">
+                </div>
+            </div>
+
+            <!-- Card Free Fire -->
+            <div class="relative group w-[250px] h-[500px] rounded-[10px] overflow-hidden shadow-lg">
+                <img src="assets/ff-banner.webp" alt="ff" class="w-full h-full object-cover transition duration-500 group-hover:brightness-50">
+                <div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                    <img src="assets/ff.png" alt="ff logo" class="h-[200px] mb-4">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-[200px]"> <!-- kasih margin top biar turun -->
+        <div class="bg-red-800/70 flex items-center justify-center gap-[150px] py-4">
+            <img src="assets/github.png" alt="github" class="w-[60px]">
+            <img src="assets/instagram-white-icon.webp" alt="instagram" class="w-[50px]">
+            <img src="assets/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.webp" alt="discord" class="w-[60px]">
+        </div>
+        <img src="assets/banner_topup_now.jpg" alt="banner" class="w-full object-cover" />
+    </section>
+
     <script src="script.js"></script>
 </body>
 

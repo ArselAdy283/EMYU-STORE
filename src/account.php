@@ -27,8 +27,8 @@ if (!isset($_SESSION['username'])) {
         <section class="w-2/3 pt-6 pb-20">
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
                 <div class="flex items-center gap-6">
-                    <div class="flex-none bg-white rounded-full w-20 h-20 flex items-center justify-center">
-                        <img src="assets/user.svg" alt="avatar" class="w-12 h-12 object-contain">
+                    <div>
+                        <img src="uploads/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" class="w-20 h-20 rounded-full object-cover">
                     </div>
 
                     <div class="flex-1">
@@ -48,12 +48,12 @@ if (!isset($_SESSION['username'])) {
                     </a>
 
                     <button onclick="document.getElementById('settingPopup').classList.remove('hidden')"
-                        class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
+                        class="flex flex-col items-center gap-3 cursor-pointer transform transition duration-300 hover:scale-110">
                         <img src="assets/gear.svg" alt="setting" class="w-14 h-14 invert">
                         <div class="mt-1 text-lg">Setting</div>
                     </button>
 
-                    <button onclick="document.getElementById('akunGamePopup').classList.remove('hidden')" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
+                    <button onclick="document.getElementById('akunGamePopup').classList.remove('hidden')" class="flex flex-col items-center gap-3 transform cursor-pointer transition duration-300 hover:scale-110">
                         <img src="assets/game-controller.svg" alt="game" class="w-14 h-14 invert">
                         <div class="mt-1 text-lg">Akun Game</div>
                     </button>

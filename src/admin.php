@@ -103,7 +103,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
     <ul class="flex space-x-8 text-xl font-semibold text-white">
       <li><a href="index.php" class="hover:text-[#db2525] transition">Home</a></li>
       <li><a href="orders.php" class="hover:text-[#db2525] transition">Orders</a></li>
-      <li><a href="#" class="text-[#db2525]">Inbox</a></li>
+      <li><a href="inbox.php" class="text-[#db2525]">Inbox</a></li>
       <li><a href="account.php" class="hover:text-[#db2525] transition">Account</a></li>
     </ul>
   </nav>
@@ -155,9 +155,9 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         </section>
 
         <div class="mb-10 flex gap-4">
-          <a href="admin.php?page=order&filter=all" class="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700">Semua</a>
-          <a href="admin.php?page=order&filter=pending" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700">Pending</a>
-          <a href="admin.php?page=order&filter=done" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700">Done</a>
+          <a href="admin.php?page=orders&filter=all" class="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700">Semua</a>
+          <a href="admin.php?page=orders&filter=pending" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700">Pending</a>
+          <a href="admin.php?page=orders&filter=done" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700">Done</a>
         </div>
 
         <!-- Tambahkan container untuk table -->
@@ -250,7 +250,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto">
           <?php
           while ($row = mysqli_fetch_assoc($ml)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')"  class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <button onclick="editItemPopup('<?= $row['id_item']; ?>')"  class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
               <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
               <p class="text-white text-sm font-semibold">
                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
@@ -280,7 +280,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto" data-item="<?= $row['id_item']; ?>">
           <?php
           while ($row = mysqli_fetch_assoc($ef)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
               <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
               <p class="text-white text-sm font-semibold">
                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
@@ -309,7 +309,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto" data-item="<?= $row['id_item']; ?>">
           <?php
           while ($row = mysqli_fetch_assoc($ff)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
               <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
               <p class="text-white text-sm font-semibold">
                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
