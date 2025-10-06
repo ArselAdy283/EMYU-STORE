@@ -18,14 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_order'])) {
     if ($stmt->execute()) {
         switch($filter) {
             case 'pending':
-                header("Location: admin.php?page=order&filter=pending");
+                header("Location: admin.php?page=orders&filter=pending");
                 break;
             case 'done':
-                header("Location: admin.php?page=order&filter=done");
+                header("Location: admin.php?page=orders&filter=done");
                 break;
             case 'all':
             default:
-                header("Location: admin.php?page=order&filter=all");
+                header("Location: admin.php?page=orders&filter=all");
                 break;
         }
         exit;
