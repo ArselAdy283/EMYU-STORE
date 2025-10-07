@@ -76,14 +76,57 @@
 
     <section class="mt-[200px]"> <!-- kasih margin top biar turun -->
         <div class="bg-red-800/70 flex items-center justify-center gap-[150px] py-4">
-            <img src="assets/github.png" alt="github" class="w-[60px]">
-            <img src="assets/instagram-white-icon.webp" alt="instagram" class="w-[50px]">
-            <img src="assets/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.webp" alt="discord" class="w-[60px]">
+            <button onclick="githubPopup()" class="cursor-pointer">
+                <img src="assets/github.png" alt="github" class="w-[60px]">
+            </button>
+            <button onclick="instagramPopup()" class="cursor-pointer">
+                <img src="assets/instagram-white-icon.webp" alt="instagram" class="w-[50px]">
+            </button>
+            <a href="https://discord.com/invite/xMGjMPS3cf" target="_blank">
+                <img src="assets/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.webp" alt="discord" class="w-[60px]">
+            </a>
         </div>
         <img src="assets/banner_topup_now.jpg" alt="banner" class="w-full object-cover" />
-    </section>
 
+        <div id="githubPopup"
+            class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+            <div class="bg-red-800/80 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
+                <button onclick="document.getElementById('githubPopup').classList.add('hidden')"
+                    class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+
+                <div id="githubPopupContent"></div>
+            </div>
+        </div>
+        <div id="instagramPopup"
+            class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+            <div class="bg-red-800/80 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
+                <button onclick="document.getElementById('instagramPopup').classList.add('hidden')"
+                    class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+
+                <div id="instagramPopupContent"></div>
+            </div>
+        </div>
+    </section>
     <script src="script.js"></script>
+    <script>
+        function githubPopup() {
+            fetch("github.php")
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById("githubPopupContent").innerHTML = html;
+                    document.getElementById("githubPopup").classList.remove("hidden");
+                });
+        }
+
+        function instagramPopup() {
+            fetch("instagram.php")
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById("instagramPopupContent").innerHTML = html;
+                    document.getElementById("instagramPopup").classList.remove("hidden");
+                });
+        }
+    </script>
 </body>
 
 </html>

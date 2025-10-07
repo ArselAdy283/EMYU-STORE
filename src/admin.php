@@ -323,7 +323,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
 
   </div>
   <div id="editItemPopup"
-    class="hidden fixed inset-0 flex items-center justify-center bg-black/80 z-50">
+    class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
     <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
       <button onclick="document.getElementById('editItemPopup').classList.add('hidden')"
         class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>

@@ -59,7 +59,7 @@ if (!$item) {
             </div>
 
             <div>
-                <label class="block text-sm font-semibold mb-1">Harga (IDR)</label>
+                <label class="block text-sm font-semibold mb-1">Harga</label>
                 <input type="tel" name="harga_item" value="<?= htmlspecialchars($item['harga_item']); ?>"
                        class="w-full px-3 py-2 rounded bg-[color:#2a2a2a] text-white">
             </div>
