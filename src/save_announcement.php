@@ -25,7 +25,7 @@ $result = $koneksi->query("
 ");
 
 while ($row = $result->fetch_assoc()) {
-  echo '<div class="flex flex-col">
+  echo '<div class="border-b border-gray-700 pb-10 flex flex-col">
           <div class="flex items-center gap-2">
             <span class="font-semibold text-[#db2525]">' . htmlspecialchars($row['username']) . '</span>
             <span class="text-xs text-gray-400">' . date('H:i', strtotime($row['created_at'])) . '</span>

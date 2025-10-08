@@ -17,7 +17,7 @@
       <?php
       include 'koneksi.php';
       $messages = $koneksi->query("
-        SELECT inbox.message, inbox.created_at, users.username
+        SELECT inbox.message, inbox.created_at, users.display_name
         FROM inbox
         JOIN users ON inbox.id_user = users.id_user
         ORDER BY inbox.created_at DESC
@@ -26,7 +26,7 @@
       ?>
         <div class="border-b border-gray-700 pb-3">
           <div class="flex items-center gap-2 mb-1">
-            <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['username']); ?></span>
+            <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['display_name']); ?></span>
             <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])); ?></span>
           </div>
           <p class="text-gray-200"><?= nl2br(htmlspecialchars($msg['message'])); ?></p>

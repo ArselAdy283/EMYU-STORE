@@ -341,29 +341,38 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
           <?php
           // Ambil pesan dari database
           $messages = $koneksi->query("
-              SELECT inbox.message, inbox.created_at, users.username
+              SELECT inbox.id_inbox, inbox.message, inbox.created_at, users.display_name
               FROM inbox
               JOIN users ON inbox.id_user = users.id_user
-              ORDER BY inbox.created_at ASC
+              ORDER BY inbox.created_at DESC
           ");
           while ($msg = $messages->fetch_assoc()) :
           ?>
-            <div class="flex flex-col">
+            <div class="border-b border-gray-700 pb-10 flex flex-col relative chat-message"
+              data-id="<?= $msg['id_inbox'] ?>">
               <div class="flex items-center gap-2">
-                <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['username']); ?></span>
-                <span class="text-xs text-gray-400"><?= date('H:i', strtotime($msg['created_at'])); ?></span>
+                <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['display_name']); ?></span>
+                <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])); ?></span>
               </div>
               <p class="text-gray-200"><?= nl2br(htmlspecialchars($msg['message'])); ?></p>
             </div>
           <?php endwhile; ?>
         </div>
 
+        <!-- Menu klik kanan -->
+        <div id="contextMenu"
+          class="hidden fixed bg-[#18181c] border border-gray-600 rounded-lg shadow-lg text-white text-sm z-50">
+          <button id="editMessageBtn" class="block w-full text-left px-4 py-2 hover:bg-[#db2525]/80">Edit</button>
+          <button id="deleteMessageBtn" class="block w-full text-left px-4 py-2 hover:bg-red-700">Delete</button>
+        </div>
+
+
         <form id="chatForm" class="flex gap-2 items-end relative">
           <div class="flex-1 relative h-auto">
             <div id="chatInputWrapper"
               class="absolute bottom-0 left-0 right-0 flex flex-col-reverse">
               <textarea id="chatInput" name="message" rows="1"
-                placeholder="Ketik pesan, Shift + Enter untuk baris baru..."
+                placeholder="Ketik pesan"
                 class="px-4 py-3 rounded-lg bg-[#212121] text-white outline-none resize-none focus:ring-2 focus:ring-[#db2525]
                overflow-y-auto max-h-[225px] transition-all duration-150"
                 autocomplete="off"></textarea>
@@ -379,27 +388,6 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
           const chatInput = document.getElementById('chatInput');
           const chatContainer = document.getElementById('chatContainer');
           const chatWrapper = document.getElementById('chatInputWrapper');
-
-          chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const message = chatInput.value.trim();
-            if (!message) return;
-
-            const formData = new FormData();
-            formData.append('message', message);
-
-            const res = await fetch('save_announcement.php', {
-              method: 'POST',
-              body: formData
-            });
-            if (res.ok) {
-              const html = await res.text();
-              chatContainer.innerHTML = html;
-              chatContainer.scrollTop = chatContainer.scrollHeight;
-              chatInput.value = '';
-              chatInput.style.height = 'auto';
-            }
-          });
 
           // === Auto resize dan tetap "naik ke atas" ===
           chatInput.addEventListener('input', () => {
@@ -418,6 +406,113 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               chatForm.dispatchEvent(new Event('submit'));
+            }
+          });
+
+          // === KLIK KANAN PESAN ===
+          const contextMenu = document.getElementById('contextMenu');
+          let selectedMessageId = null;
+
+          // Tampilkan menu saat klik kanan
+          chatContainer.addEventListener('contextmenu', (e) => {
+            const msg = e.target.closest('.chat-message');
+            if (!msg) return;
+            e.preventDefault();
+
+            selectedMessageId = msg.dataset.id;
+            contextMenu.style.top = e.pageY + 'px';
+            contextMenu.style.left = e.pageX + 'px';
+            contextMenu.classList.remove('hidden');
+          });
+
+          // Klik di luar menu untuk menyembunyikan
+          document.addEventListener('click', () => {
+            contextMenu.classList.add('hidden');
+          });
+
+          // Tombol Delete
+          document.getElementById('deleteMessageBtn').addEventListener('click', async () => {
+            const res = await fetch('delete_announcement.php', {
+              method: 'POST',
+              body: new URLSearchParams({
+                id: selectedMessageId
+              })
+            });
+            if (res.ok) {
+              document.querySelector(`.chat-message[data-id="${selectedMessageId}"]`).remove();
+            }
+            contextMenu.classList.add('hidden');
+          });
+
+          let editingMessageId = null;
+
+          // Tombol Edit
+          document.getElementById('editMessageBtn').addEventListener('click', () => {
+            const msgElement = document.querySelector(`.chat-message[data-id="${selectedMessageId}"] p`);
+            const oldText = msgElement.textContent.trim();
+
+            // Masukkan teks lama ke textarea untuk diedit
+            chatInput.value = oldText;
+            chatInput.focus();
+            editingMessageId = selectedMessageId;
+
+            // Sesuaikan tinggi textarea
+            chatInput.style.height = 'auto';
+            chatInput.style.height = chatInput.scrollHeight + 'px';
+
+            contextMenu.classList.add('hidden');
+          });
+
+          // Saat tombol submit diklik
+          chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Mode edit
+            if (editingMessageId) {
+              const res = await fetch('edit_announcement.php', {
+                method: 'POST',
+                body: new URLSearchParams({
+                  id: editingMessageId,
+                  message: message
+                })
+              });
+
+              if (res.ok) {
+                // Hapus pesan lama dulu
+                const oldMsg = document.querySelector(`.chat-message[data-id="${editingMessageId}"]`);
+                if (oldMsg) oldMsg.remove();
+
+                // Setelah itu kirim ulang HTML terbaru dari server (pesan hasil edit)
+                const newMsgHTML = await res.text();
+                chatContainer.insertAdjacentHTML('beforeend', newMsgHTML);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                // Reset form
+                editingMessageId = null;
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+              }
+
+              return;
+            }
+
+            // Mode kirim pesan baru
+            const formData = new FormData();
+            formData.append('message', message);
+
+            const res = await fetch('save_announcement.php', {
+              method: 'POST',
+              body: formData
+            });
+
+            if (res.ok) {
+              const html = await res.text();
+              chatContainer.innerHTML = html;
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+              chatInput.value = '';
+              chatInput.style.height = 'auto';
             }
           });
         </script>
