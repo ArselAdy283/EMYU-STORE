@@ -8,3 +8,10 @@ window.addEventListener('scroll', function () {
         navbar.classList.add('bg-transparent');
     }
 });
+
+const links = document.querySelectorAll(".nav-link");
+  links.forEach(link => {
+    if (link.href === window.location.href) {
+      link.classList.add("text-[color:#ffed00]");
+    }
+  });

@@ -23,10 +23,10 @@
 
         <!-- Menu -->
         <ul class="flex space-x-8 text-xl font-semibold">
-            <li><a href="index.php" class="transform transition duration-300 hover:text-[color:#ffed00]">Home</a></li>
-            <li><a href="orders.php" class="transform transition duration-500 hover:text-[color:#ffed00]">Orders</a></li>
-            <li><a href="inbox.php" class="transform transition duration-500 text-[color:#ffed00]">Inbox</a></li>
-            <li><a href="account.php" class="transform transition duration-500 hover:text-[color:#ffed00]">Account</a></li>
+            <li><a href="index.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Home</a></li>
+            <li><a href="orders.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Orders</a></li>
+            <li><a href="inbox.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Inbox</a></li>
+            <li><a href="account.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Account</a></li>
         </ul>
     </nav>
 
@@ -90,7 +90,7 @@
 
         <div id="githubPopup"
             class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-            <div class="bg-red-800/80 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
+            <div class="bg-red-800 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
                 <button onclick="document.getElementById('githubPopup').classList.add('hidden')"
                     class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
 
@@ -99,7 +99,7 @@
         </div>
         <div id="instagramPopup"
             class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-            <div class="bg-red-800/80 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
+            <div class="bg-red-800 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
                 <button onclick="document.getElementById('instagramPopup').classList.add('hidden')"
                     class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
 

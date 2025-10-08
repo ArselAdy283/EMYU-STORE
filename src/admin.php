@@ -78,7 +78,6 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
       color: white;
     }
 
-    /* Tambahkan style untuk table container */
     .table-container {
       overflow-x: auto;
       margin-top: 30px;
@@ -101,10 +100,10 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
       <div class="w-[80px] h-[80px]"></div>
     </div>
     <ul class="flex space-x-8 text-xl font-semibold text-white">
-      <li><a href="index.php" class="hover:text-[#db2525] transition">Home</a></li>
-      <li><a href="orders.php" class="hover:text-[#db2525] transition">Orders</a></li>
-      <li><a href="inbox.php" class="text-[#db2525]">Inbox</a></li>
-      <li><a href="account.php" class="hover:text-[#db2525] transition">Account</a></li>
+      <li><a href="index.php" class="nav-link transform transition duration-300 hover:text-[#db2525]">Home</a></li>
+      <li><a href="orders.php" class="nav-link transform transition duration-300 hover:text-[#db2525]">Orders</a></li>
+      <li><a href="inbox.php" class="nav-link transform transition duration-300 hover:text-[#db2525]">Inbox</a></li>
+      <li><a href="account.php" class="nav-link text-[#db2525]">Account</a></li>
     </ul>
   </nav>
 
@@ -119,7 +118,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
       <nav class="flex-1 p-4 space-y-4">
         <a href="admin.php?page=order" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Order</a>
         <a href="admin.php?page=item" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Item</a>
-        <a href="admin.php?page=inbox" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Inbox</a>
+        <a href="admin.php?page=announcement" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Announcement</a>
         <a href="admin.php?page=user" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">User</a>
       </nav>
       <div class="p-4 border-t border-gray-700">
@@ -129,10 +128,12 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
+
     <main class="flex-1 p-8 ml-64">
       <?php
       $page = $_GET['page'] ?? 'dashboard'; ?>
+
+      <!-- ==================================================/ORDER/========================================================== -->
 
       <?php if ($page === 'orders'): ?>
         <header class="flex justify-between items-center mb-8">
@@ -160,7 +161,6 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
           <a href="admin.php?page=orders&filter=done" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700">Done</a>
         </div>
 
-        <!-- Tambahkan container untuk table -->
         <div class="table-container">
           <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
             <thead class="bg-[color:#db2525] text-white text-center uppercase text-base">
@@ -230,6 +230,8 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
           </table>
         </div>
 
+        <!-- ===================================================/ITEM/=============================================================== -->
+
       <?php elseif ($page === 'item'): ?>
         <h1 class='text-3xl font-bold mb-20'>Item</h1>
 
@@ -241,16 +243,16 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
 
         <?php
         $ml = mysqli_query($koneksi, "
-    SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
-    FROM items i 
-    JOIN games g ON i.id_game = g.id_game
-    WHERE g.nama_game = 'Mobile Lagends: Bang Bang'
-  ");
+          SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
+          FROM items i 
+          JOIN games g ON i.id_game = g.id_game
+          WHERE g.nama_game = 'Mobile Lagends: Bang Bang'
+        ");
         ?>
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto">
           <?php
           while ($row = mysqli_fetch_assoc($ml)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')"  class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
+            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
               <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
               <p class="text-white text-sm font-semibold">
                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
@@ -271,11 +273,11 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
 
         <?php
         $ef = mysqli_query($koneksi, "
-    SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
-    FROM items i 
-    JOIN games g ON i.id_game = g.id_game
-    WHERE g.nama_game = 'eFootball™'
-  ");
+          SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
+          FROM items i 
+          JOIN games g ON i.id_game = g.id_game
+          WHERE g.nama_game = 'eFootball™'
+        ");
         ?>
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto" data-item="<?= $row['id_item']; ?>">
           <?php
@@ -300,11 +302,11 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         </div>
         <?php
         $ff = mysqli_query($koneksi, "
-    SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
-    FROM items i 
-    JOIN games g ON i.id_game = g.id_game
-    WHERE g.nama_game = 'Free Fire'
-  ");
+          SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
+          FROM items i 
+          JOIN games g ON i.id_game = g.id_game
+          WHERE g.nama_game = 'Free Fire'
+        ");
         ?>
         <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto" data-item="<?= $row['id_item']; ?>">
           <?php
@@ -320,43 +322,129 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
             </button>
           <?php endwhile; ?>
         </div>
+        <div id="editItemPopup"
+          class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+          <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
+            <button onclick="document.getElementById('editItemPopup').classList.add('hidden')"
+              class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+
+            <div id="editItemPopupContent"></div>
+          </div>
+        </div>
+
+        <!-- =============================================/ANNOUNCEMENT/============================================================= -->
+
+      <?php elseif ($page === 'announcement'): ?>
+        <h1 class="text-3xl font-bold mb-6">📢 Announcement</h1>
+
+        <div id="chatContainer" class="bg-[#18181c] rounded-xl p-6 h-[450px] overflow-y-auto mb-4 flex flex-col space-y-4">
+          <?php
+          // Ambil pesan dari database
+          $messages = $koneksi->query("
+              SELECT inbox.message, inbox.created_at, users.username
+              FROM inbox
+              JOIN users ON inbox.id_user = users.id_user
+              ORDER BY inbox.created_at ASC
+          ");
+          while ($msg = $messages->fetch_assoc()) :
+          ?>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['username']); ?></span>
+                <span class="text-xs text-gray-400"><?= date('H:i', strtotime($msg['created_at'])); ?></span>
+              </div>
+              <p class="text-gray-200"><?= nl2br(htmlspecialchars($msg['message'])); ?></p>
+            </div>
+          <?php endwhile; ?>
+        </div>
+
+        <form id="chatForm" class="flex gap-2 items-end relative">
+          <div class="flex-1 relative h-auto">
+            <div id="chatInputWrapper"
+              class="absolute bottom-0 left-0 right-0 flex flex-col-reverse">
+              <textarea id="chatInput" name="message" rows="1"
+                placeholder="Ketik pesan, Shift + Enter untuk baris baru..."
+                class="px-4 py-3 rounded-lg bg-[#212121] text-white outline-none resize-none focus:ring-2 focus:ring-[#db2525]
+               overflow-y-auto max-h-[225px] transition-all duration-150"
+                autocomplete="off"></textarea>
+            </div>
+          </div>
+          <button type="submit"
+            class="bg-[#db2525] px-5 py-3 rounded-lg font-bold hover:bg-red-700 transition">
+            Kirim
+          </button>
+        </form>
+        <script>
+          const chatForm = document.getElementById('chatForm');
+          const chatInput = document.getElementById('chatInput');
+          const chatContainer = document.getElementById('chatContainer');
+          const chatWrapper = document.getElementById('chatInputWrapper');
+
+          chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            const formData = new FormData();
+            formData.append('message', message);
+
+            const res = await fetch('save_announcement.php', {
+              method: 'POST',
+              body: formData
+            });
+            if (res.ok) {
+              const html = await res.text();
+              chatContainer.innerHTML = html;
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+              chatInput.value = '';
+              chatInput.style.height = 'auto';
+            }
+          });
+
+          // === Auto resize dan tetap "naik ke atas" ===
+          chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            const scrollH = chatInput.scrollHeight;
+            const maxHeight = 225; // batas tinggi maksimum
+            const newHeight = Math.min(scrollH, maxHeight);
+            chatInput.style.height = newHeight + 'px';
+            chatWrapper.style.height = newHeight + 'px';
+            chatInput.style.overflowY = scrollH > maxHeight ? 'scroll' : 'hidden';
+          });
+
+          // Shift + Enter = baris baru
+          chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.shiftKey) return;
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              chatForm.dispatchEvent(new Event('submit'));
+            }
+          });
+        </script>
+
+        <!-- ===============================================/USER/==================================================================== -->
+
+      <?php elseif ($page === 'user'): ?>
+        <h1 class='text-3xl font-bold mb-4'>👤 User</h1>
+        <p>Kelola data user di sini...</p>
+
+      <?php else: ?>
+        <?php header("Location: admin.php?page=orders") ?>
+      <?php endif ?>
+
+    </main>
 
   </div>
-  <div id="editItemPopup"
-    class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-    <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
-      <button onclick="document.getElementById('editItemPopup').classList.add('hidden')"
-        class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
-
-      <div id="editItemPopupContent"></div>
-    </div>
-  </div>
-
-<?php elseif ($page === 'inbox'): ?>
-  <h1 class='text-3xl font-bold mb-4'>💻 Inbox</h1>
-  <p>Kelola data user di sini...</p>
-
-<?php elseif ($page === 'user'): ?>
-  <h1 class='text-3xl font-bold mb-4'>👤 User</h1>
-  <p>Kelola data user di sini...</p>
-
-<?php else: ?>
-  <?php header("Location: admin.php?page=orders")?>
-<?php endif ?>
-
-</main>
-
-</div>
-<script>
-  function editItemPopup(item) {
-    fetch("edit_item.php?id_item=" + item)
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("editItemPopupContent").innerHTML = html;
-        document.getElementById("editItemPopup").classList.remove("hidden");
-      });
-  }
-</script>
+  <script>
+    function editItemPopup(item) {
+      fetch("edit_item.php?id_item=" + item)
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("editItemPopupContent").innerHTML = html;
+          document.getElementById("editItemPopup").classList.remove("hidden");
+        });
+    }
+  </script>
 </body>
 
 </html>
