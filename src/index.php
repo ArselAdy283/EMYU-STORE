@@ -108,25 +108,7 @@
         </div>
     </section>
     <script src="script.js"></script>
-    <script>
-        function githubPopup() {
-            fetch("github.php")
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById("githubPopupContent").innerHTML = html;
-                    document.getElementById("githubPopup").classList.remove("hidden");
-                });
-        }
-
-        function instagramPopup() {
-            fetch("instagram.php")
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById("instagramPopupContent").innerHTML = html;
-                    document.getElementById("instagramPopup").classList.remove("hidden");
-                });
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 
 </html>

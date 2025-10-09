@@ -6,7 +6,7 @@ $message = trim($_POST['message']);
 $koneksi->query("UPDATE inbox SET message = '$message' WHERE id_inbox = '$id'");
 
 $result = $koneksi->query("
-  SELECT inbox.id_inbox, inbox.message, inbox.created_at, users.username
+  SELECT inbox.id_inbox, inbox.message, inbox.created_at, users.display_name
   FROM inbox
   JOIN users ON inbox.id_user = users.id_user
   WHERE inbox.id_inbox = '$id'
@@ -17,8 +17,8 @@ $msg = $result->fetch_assoc();
 <div class="border-b border-gray-700 pb-10 flex flex-col relative chat-message"
   data-id="<?= $msg['id_inbox'] ?>">
   <div class="flex items-center gap-2">
-    <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['username']); ?></span>
-    <span class="text-xs text-gray-400"><?= date('H:i', strtotime($msg['created_at'])); ?></span>
+    <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['display_name']); ?></span>
+    <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])); ?></span>
   </div>
   <p class="text-gray-200"><?= nl2br(htmlspecialchars($msg['message'])); ?></p>
 </div>
