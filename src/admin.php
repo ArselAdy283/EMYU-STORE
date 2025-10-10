@@ -116,7 +116,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         <a href="admin.php">Dashboard</a>
       </div>
       <nav class="flex-1 p-4 space-y-4">
-        <a href="admin.php?page=order" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Order</a>
+        <a href="admin.php?page=orders" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Orders</a>
         <a href="admin.php?page=item" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Item</a>
         <a href="admin.php?page=announcement" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">Announcement</a>
         <a href="admin.php?page=user" class="block py-2 px-4 rounded-lg hover:bg-[#db2525] hover:text-white transition">User</a>
@@ -136,9 +136,10 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
       <!-- ==================================================/ORDER/========================================================== -->
 
       <?php if ($page === 'orders'): ?>
-        <header class="flex justify-between items-center mb-8">
+        <div class="flex gap-4 mb-10">
+          <img src="assets/tray.svg" class="invert"/>
           <h1 class="text-3xl font-bold">Orders</h1>
-        </header>
+        </div>
 
         <section class="grid grid-cols-3 gap-6 mb-10">
           <div class="bg-[#18181c] rounded-xl shadow p-6">
@@ -233,7 +234,10 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         <!-- ===================================================/ITEM/=============================================================== -->
 
       <?php elseif ($page === 'item'): ?>
-        <h1 class='text-3xl font-bold mb-20'>Item</h1>
+        <div class="flex gap-4 mb-10">
+          <img src="assets/cube.svg" class="invert"/>
+          <h1 class='text-3xl font-bold'>Item</h1>
+        </div>
 
         <!-- Mobile Legend -->
         <div class="flex items-center gap-4 mb-10">
@@ -326,7 +330,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
           class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
           <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
             <button onclick="document.getElementById('editItemPopup').classList.add('hidden')"
-              class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+              class="absolute top-4 right-6 text-white hover:text-[#db2525] transition text-xl">✖</button>
 
             <div id="editItemPopupContent"></div>
           </div>
@@ -335,26 +339,31 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
         <!-- =============================================/ANNOUNCEMENT/============================================================= -->
 
       <?php elseif ($page === 'announcement'): ?>
-        <h1 class="text-3xl font-bold mb-6">📢 Announcement</h1>
+        <div class="flex gap-4">
+          <img src="assets/megaphone.svg" class="invert translate-y-[-15px]"/>
+          <h1 class="text-3xl font-bold mb-6">Announcement</h1>
+        </div>
 
         <div id="chatContainer" class="bg-[#18181c] rounded-xl p-6 h-[450px] overflow-y-auto mb-4 flex flex-col space-y-4">
           <?php
           // Ambil pesan dari database
           $messages = $koneksi->query("
-              SELECT inbox.id_inbox, inbox.message, inbox.created_at, users.display_name
+              SELECT inbox.id_inbox, inbox.message, inbox.created_at, inbox.image_path, users.display_name
               FROM inbox
               JOIN users ON inbox.id_user = users.id_user
               ORDER BY inbox.created_at ASC
           ");
-          while ($msg = $messages->fetch_assoc()) :
+          while ($msg = $messages->fetch_assoc()):
           ?>
-            <div class="border-b border-gray-700 pb-10 flex flex-col relative chat-message"
-              data-id="<?= $msg['id_inbox'] ?>">
+            <div class="border-b border-gray-700 pb-8 flex flex-col relative chat-message" data-id="<?= $msg['id_inbox'] ?>">
               <div class="flex items-center gap-2">
-                <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['display_name']); ?></span>
-                <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])); ?></span>
+                <span class="font-semibold text-[#db2525]"><?= htmlspecialchars($msg['display_name']) ?></span>
+                <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])) ?></span>
               </div>
-              <p class="text-gray-200"><?= nl2br(htmlspecialchars($msg['message'])); ?></p>
+              <p class="text-gray-200 mt-1"><?= nl2br(htmlspecialchars($msg['message'])) ?></p>
+              <?php if (!empty($msg['image_path'])): ?>
+                <img src="<?= htmlspecialchars($msg['image_path']) ?>" class="max-w-[250px] rounded-lg mt-3 border border-gray-700" />
+              <?php endif; ?>
             </div>
           <?php endwhile; ?>
         </div>
@@ -366,23 +375,49 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
           <button id="deleteMessageBtn" class="block w-full text-left px-4 py-2 hover:bg-red-700">Delete</button>
         </div>
 
-
         <form id="chatForm" class="flex gap-2 items-end relative">
           <div class="flex-1 relative h-auto">
-            <div id="chatInputWrapper"
-              class="absolute bottom-0 left-0 right-0 flex flex-col-reverse">
+
+            <!-- Wrapper input -->
+            <div id="chatInputWrapper" class="absolute bottom-0 left-0 right-0 flex flex-col-reverse">
+
+              <!-- Tombol upload -->
+              <div class="absolute left-3 bottom-3 cursor-pointer">
+                <label for="chatImage">
+                  <img src="assets/image.svg" class="h-6 w-6 invert hover:opacity-80">
+                </label>
+                <input type="file" id="chatImage" name="image" accept="image/*" class="hidden" />
+              </div>
+
+              <!-- Textarea -->
               <textarea id="chatInput" name="message" rows="1"
                 placeholder="Ketik pesan"
-                class="px-4 py-3 rounded-lg bg-[#212121] text-white outline-none resize-none focus:ring-2 focus:ring-[#db2525]
-               overflow-y-auto max-h-[225px] transition-all duration-150"
+                class="pl-12 pr-4 py-3 rounded-lg bg-[#212121] text-white outline-none resize-none focus:ring-2 focus:ring-[#db2525]
+        overflow-y-auto max-h-[225px] transition-all duration-150"
                 autocomplete="off"></textarea>
+
+              <!-- Preview gambar (di dalam area input) -->
+              <div id="imagePreviewInside"
+                class="hidden absolute bottom-full left-0 mb-2 bg-[#2a2a2a] p-2 rounded-lg flex items-center gap-2 max-w-[250px]">
+                <img id="previewImgInside" src="" alt="Preview"
+                  class="h-40 w-70 object-cover rounded-md border border-gray-700">
+                <button type="button" id="removePreviewInside"
+                  class="text-xs text-white bg-black/50 hover:bg-black rounded px-2 py-1">✕</button>
+              </div>
             </div>
           </div>
+
           <button type="submit"
             class="bg-[#db2525] px-5 py-3 rounded-lg font-bold hover:bg-red-700 transition">
             Kirim
           </button>
         </form>
+        <div id="imagePopup"
+          class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <img id="popupImg" src="" alt="Preview" class="max-w-[90%] max-h-[90%] rounded-lg border border-gray-700 shadow-lg">
+          <button id="closePopup"
+            class="absolute top-6 right-6 text-white text-2xl font-bold hover:text-[#db2525] transition">✕</button>
+        </div>
 
         <!-- ===============================================/USER/==================================================================== -->
 
@@ -397,6 +432,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
     </main>
 
   </div>
+
   <script src="app.js"></script>
 </body>
 

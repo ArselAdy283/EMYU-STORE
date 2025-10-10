@@ -1,5 +1,6 @@
-// index.php
-
+// =====================================
+// index.php popup functions
+// =====================================
 function githubPopup() {
     fetch("github.php")
         .then(res => res.text())
@@ -18,10 +19,11 @@ function instagramPopup() {
         });
 }
 
+// =====================================
 // admin.php
+// =====================================
 
-// ================================/item/=======================================================
-
+// ================================ ITEM POPUP ================================
 function editItemPopup(item) {
     fetch("edit_item.php?id_item=" + item)
         .then(res => res.text())
@@ -31,12 +33,21 @@ function editItemPopup(item) {
         });
 }
 
-// =============================/announcement/================================================
+// ============================= ANNOUNCEMENT CHAT ============================
 
 const chatForm = document.getElementById('chatForm');
 const chatInput = document.getElementById('chatInput');
 const chatContainer = document.getElementById('chatContainer');
 const chatWrapper = document.getElementById('chatInputWrapper');
+const contextMenu = document.getElementById('contextMenu');
+const deleteBtn = document.getElementById('deleteMessageBtn');
+const editBtn = document.getElementById('editMessageBtn');
+const chatImage = document.getElementById('chatImage');
+
+// ==== Discord-like image preview (di atas textarea) ====
+const previewInside = document.getElementById('imagePreviewInside');
+const previewImgInside = document.getElementById('previewImgInside');
+const removePreviewInside = document.getElementById('removePreviewInside');
 
 // === Auto resize dan tetap "naik ke atas" ===
 chatInput.addEventListener('input', () => {
@@ -49,7 +60,7 @@ chatInput.addEventListener('input', () => {
     chatInput.style.overflowY = scrollH > maxHeight ? 'scroll' : 'hidden';
 });
 
-// Shift + Enter = baris baru
+// === Shift + Enter untuk baris baru ===
 chatInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.shiftKey) return;
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -59,7 +70,6 @@ chatInput.addEventListener('keydown', (e) => {
 });
 
 // === KLIK KANAN PESAN ===
-const contextMenu = document.getElementById('contextMenu');
 let selectedMessageId = null;
 
 chatContainer.addEventListener('contextmenu', (e) => {
@@ -72,28 +82,29 @@ chatContainer.addEventListener('contextmenu', (e) => {
     contextMenu.classList.remove('hidden');
 });
 
+// Tutup context menu jika klik di luar
 document.addEventListener('click', () => {
     contextMenu.classList.add('hidden');
 });
 
-// Tombol Delete
-document.getElementById('deleteMessageBtn').addEventListener('click', async () => {
+// === DELETE PESAN ===
+deleteBtn.addEventListener('click', async () => {
     const res = await fetch('delete_announcement.php', {
         method: 'POST',
-        body: new URLSearchParams({
-            id: selectedMessageId
-        })
+        body: new URLSearchParams({ id: selectedMessageId })
     });
+
     if (res.ok) {
         document.querySelector(`.chat-message[data-id="${selectedMessageId}"]`)?.remove();
     }
+
     contextMenu.classList.add('hidden');
 });
 
+// === EDIT PESAN ===
 let editingMessageId = null;
 
-// Tombol Edit
-document.getElementById('editMessageBtn').addEventListener('click', () => {
+editBtn.addEventListener('click', () => {
     const msgElement = document.querySelector(`.chat-message[data-id="${selectedMessageId}"] p`);
     const oldText = msgElement.textContent.trim();
     chatInput.value = oldText;
@@ -105,11 +116,32 @@ document.getElementById('editMessageBtn').addEventListener('click', () => {
     contextMenu.classList.add('hidden');
 });
 
+// === PREVIEW GAMBAR DI DALAM AREA INPUT (DISCORD STYLE) ===
+chatImage.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        previewImgInside.src = evt.target.result;
+        previewInside.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+});
+
+removePreviewInside.addEventListener('click', () => {
+    chatImage.value = '';
+    previewImgInside.src = '';
+    previewInside.classList.add('hidden');
+});
+
 // === SUBMIT PESAN ===
 chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const message = chatInput.value.trim();
-    if (!message) return;
+    const imageFile = chatImage.files[0];
+
+    if (!message && !imageFile) return;
 
     // === MODE EDIT ===
     if (editingMessageId) {
@@ -122,13 +154,9 @@ chatForm.addEventListener('submit', async (e) => {
         });
 
         if (res.ok) {
-            // Ambil HTML pesan yang sudah diperbarui dari server
             const newMsgHTML = await res.text();
             const oldMsg = document.querySelector(`.chat-message[data-id="${editingMessageId}"]`);
-            if (oldMsg) {
-                // Ganti hanya elemen pesan, tidak pindah posisi
-                oldMsg.outerHTML = newMsgHTML;
-            }
+            if (oldMsg) oldMsg.outerHTML = newMsgHTML;
 
             editingMessageId = null;
             chatInput.value = '';
@@ -140,6 +168,7 @@ chatForm.addEventListener('submit', async (e) => {
     // === MODE PESAN BARU ===
     const formData = new FormData();
     formData.append('message', message);
+    if (imageFile) formData.append('image', imageFile);
 
     const res = await fetch('save_announcement.php', {
         method: 'POST',
@@ -149,17 +178,19 @@ chatForm.addEventListener('submit', async (e) => {
     if (res.ok) {
         const html = await res.text();
 
-        // tambahkan pesan baru di bawah (akhir list)
+        // tambahkan pesan baru di bawah
         chatContainer.insertAdjacentHTML('beforeend', html);
-
-        // scroll ke bawah untuk lihat pesan baru
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
-        // reset input
+        // reset input dan preview
         chatInput.value = '';
         chatInput.style.height = 'auto';
+        chatImage.value = '';
+        previewImgInside.src = '';
+        previewInside.classList.add('hidden');
     }
-    // Pastikan klik kanan aktif juga untuk pesan baru
+
+    // aktifkan klik kanan untuk pesan baru
     const newMsg = chatContainer.lastElementChild;
     if (newMsg) {
         newMsg.addEventListener('contextmenu', (e) => {
@@ -170,5 +201,33 @@ chatForm.addEventListener('submit', async (e) => {
             contextMenu.classList.remove('hidden');
         });
     }
+});
 
+// ==== POPUP GAMBAR ====
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById("imagePopup");
+  const popupImg = document.getElementById("popupImg");
+  const closePopup = document.getElementById("closePopup");
+
+  // 🔹 Delegasi event klik untuk gambar di dalam chatContainer
+  document.getElementById("chatContainer").addEventListener("click", (e) => {
+    if (e.target.tagName === "IMG") {
+      popupImg.src = e.target.src;
+      popup.classList.remove("hidden");
+    }
+  });
+
+  // Tutup popup saat klik tombol X
+  closePopup.addEventListener("click", () => {
+    popup.classList.add("hidden");
+    popupImg.src = "";
+  });
+
+  // Tutup popup saat klik area hitam luar
+  popup.addEventListener("click", (e) => {
+    if (e.target === popup) {
+      popup.classList.add("hidden");
+      popupImg.src = "";
+    }
+  });
 });

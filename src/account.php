@@ -87,7 +87,7 @@ if (!isset($_SESSION['username'])) {
         <div id="settingPopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
             <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
                 <button onclick="document.getElementById('settingPopup').classList.add('hidden')"
-                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
                 <?php include 'setting.php'; ?>
             </div>
@@ -97,7 +97,7 @@ if (!isset($_SESSION['username'])) {
         <div id="akunGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
             <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
                 <button onclick="document.getElementById('akunGamePopup').classList.add('hidden')"
-                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
                 <?php include 'account_game.php'; ?>
             </div>
@@ -107,7 +107,7 @@ if (!isset($_SESSION['username'])) {
         <div id="idGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
             <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
                 <button onclick="document.getElementById('idGamePopup').classList.add('hidden')"
-                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-gray-500 text-xl">✖</button>
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
                 <div id="idGamePopupContent">
                     <!-- Konten edit_akun_game.php bakal dimuat di sini lewat fetch -->
