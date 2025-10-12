@@ -11,6 +11,7 @@
 
 <body class="overflow-x-hidden overflow-y-scroll min-h-screen bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] font-sans text-white">
     <?php
+    session_start();
     include 'navbar.php';
     ?>
 

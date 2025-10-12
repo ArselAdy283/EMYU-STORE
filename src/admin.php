@@ -39,6 +39,12 @@ $totalOrders = $koneksi->query("SELECT COUNT(*) as total FROM orders")->fetch_as
 $totalPending = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status = 'pending'")->fetch_assoc()['total'];
 $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status = 'done'")->fetch_assoc()['total'];
 
+$id_user = $_SESSION['id_user'];
+$query = $koneksi->query("SELECT emyucoin FROM saldo_user WHERE id_user = $id_user");
+$row = $query->fetch_assoc();
+$emyucoin = $row['emyucoin'] ?? 0;
+
+
 ?>
 
 <!DOCTYPE html>
@@ -99,11 +105,17 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
       <div class="w-[80px] h-[80px]"></div>
       <div class="w-[80px] h-[80px]"></div>
     </div>
-    <ul class="flex space-x-8 text-xl font-semibold text-white">
-      <li><a href="index.php" class="nav-link transform transition duration-300 hover:text-[#db2525]">Home</a></li>
-      <li><a href="orders.php" class="nav-link transform transition duration-300 hover:text-[#db2525]">Orders</a></li>
-      <li><a href="inbox.php" class="nav-link transform transition duration-300 hover:text-[#db2525]">Inbox</a></li>
-      <li><a href="account.php" class="nav-link text-[#db2525]">Account</a></li>
+    <ul class="flex space-x-8 text-xl text-white items-center">
+      <div class="font-sm text-lg bg-[color:#212121]/70 w-[200px] pl-3 pr-3 py-1 rounded-[2px] flex justify-between items-center">
+        <span>
+          <span class="text-[#db2525]">EC</span> <?= number_format($emyucoin, 0) ?>
+        </span>
+        <a href="emyucoin.php" class="bg-[color:#18181c] px-2 rounded-[2px] translate-x-[7px] text-[#db2525] hover:bg-[color:#18181c]/70">+</a>
+      </div>
+      <li><a href="index.php" class="nav-link font-semibold transform transition duration-300 hover:text-[#db2525]">Home</a></li>
+      <li><a href="orders.php" class="nav-link font-semibold ransform transition duration-300 hover:text-[#db2525]">Orders</a></li>
+      <li><a href="inbox.php" class="nav-link font-semibold transform transition duration-300 hover:text-[#db2525]">Inbox</a></li>
+      <li><a href="account.php" class="nav-link font-semibold text-[#db2525]">Account</a></li>
     </ul>
   </nav>
 
@@ -137,7 +149,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
 
       <?php if ($page === 'orders'): ?>
         <div class="flex gap-4 mb-10">
-          <img src="assets/tray.svg" class="invert"/>
+          <img src="assets/tray.svg" class="invert" />
           <h1 class="text-3xl font-bold">Orders</h1>
         </div>
 
@@ -235,7 +247,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
 
       <?php elseif ($page === 'item'): ?>
         <div class="flex gap-4 mb-10">
-          <img src="assets/cube.svg" class="invert"/>
+          <img src="assets/cube.svg" class="invert" />
           <h1 class='text-3xl font-bold'>Item</h1>
         </div>
 
@@ -340,7 +352,7 @@ $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status 
 
       <?php elseif ($page === 'announcement'): ?>
         <div class="flex gap-4">
-          <img src="assets/megaphone.svg" class="invert translate-y-[-15px]"/>
+          <img src="assets/megaphone.svg" class="invert translate-y-[-15px]" />
           <h1 class="text-3xl font-bold mb-6">Announcement</h1>
         </div>
 

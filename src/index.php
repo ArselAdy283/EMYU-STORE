@@ -1,3 +1,20 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+$emyucoin = 0;
+if (isset($_SESSION['id_user'])) {
+    $id_user = $_SESSION['id_user'];
+
+    $query = $koneksi->query("SELECT emyucoin FROM saldo_user WHERE id_user = $id_user");
+
+    if ($query && $query->num_rows > 0) {
+        $row = $query->fetch_assoc();
+        $emyucoin = $row['emyucoin'] ?? 0;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,11 +39,18 @@
         </div>
 
         <!-- Menu -->
-        <ul class="flex space-x-8 text-xl font-semibold">
-            <li><a href="index.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Home</a></li>
-            <li><a href="orders.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Orders</a></li>
-            <li><a href="inbox.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Inbox</a></li>
-            <li><a href="account.php" class="nav-link transform transition duration-300 hover:text-[color:#ffed00]">Account</a></li>
+        <ul class="flex space-x-8 text-xl text-white items-center">
+            <div class="font-sm text-lg bg-red-800/70 w-[200px] pl-3 pr-3 py-1 rounded-[2px] flex justify-between items-center">
+                <span>
+                    <span class="text-yellow-300">EC</span> <?= number_format($emyucoin, 0) ?>
+                </span>
+                <a href="emyucoin.php" class="bg-red-700/80 px-2 rounded-[2px] translate-x-[7px] text-yellow-300 hover:bg-red-700">+</a>
+            </div>
+
+            <li><a href="index.php" class="nav-link font-semibold hover:text-yellow-300">Home</a></li>
+            <li><a href="orders.php" class="nav-link font-semibold hover:text-yellow-300">Orders</a></li>
+            <li><a href="inbox.php" class="nav-link font-semibold hover:text-yellow-300">Inbox</a></li>
+            <li><a href="account.php" class="nav-link font-semibold hover:text-yellow-300">Account</a></li>
         </ul>
     </nav>
 
@@ -92,7 +116,7 @@
             class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
             <div class="bg-red-800 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
                 <button onclick="document.getElementById('githubPopup').classList.add('hidden')"
-                    class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+                    class="absolute top-4 right-6 text-white hover:text-[#ffed00] transition0 text-xl">✖</button>
 
                 <div id="githubPopupContent"></div>
             </div>
@@ -101,7 +125,7 @@
             class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
             <div class="bg-red-800 rounded-xl shadow-lg w-[700px] h-[350px] p-6 relative">
                 <button onclick="document.getElementById('instagramPopup').classList.add('hidden')"
-                    class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+                    class="absolute top-4 right-6 text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
                 <div id="instagramPopupContent"></div>
             </div>

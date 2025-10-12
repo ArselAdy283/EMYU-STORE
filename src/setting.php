@@ -10,7 +10,7 @@ include 'koneksi.php';
 
     <!-- Kolom Kiri: Foto Profil -->
     <div class="relative group">
-        <img src="uploads/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" 
+        <img src="profile_pic/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" 
              id="preview" 
              class="w-[180px] h-[180px] rounded-full object-cover cursor-pointer" />
 
@@ -79,7 +79,7 @@ if (isset($_POST['update'])) {
 
     // jika upload baru
     if (!empty($_FILES['profile_pic']['name'])) {
-        $targetDir = "uploads/";
+        $targetDir = "profile_pic/";
         $fileName = time() . "_" . basename($_FILES['profile_pic']['name']);
         $targetFilePath = $targetDir . $fileName;
 

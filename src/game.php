@@ -104,7 +104,7 @@ if ($id_user) {
                             <p class="text-white text-sm font-semibold">
                                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                             </p>
-                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item']); ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </button>
                     <?php else: ?>
                         <!-- Belum login -->
@@ -114,7 +114,7 @@ if ($id_user) {
                             <p class="text-white text-sm font-semibold">
                                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                             </p>
-                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item']); ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -127,11 +127,12 @@ if ($id_user) {
         class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
         <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
             <button onclick="document.getElementById('pembayaranPopup').classList.add('hidden')"
-                class="absolute top-4 right-6 text-white hover:text-gray-500 text-xl">✖</button>
+                class="absolute top-4 right-6 text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
             <div id="pembayaranPopupContent"></div>
         </div>
     </div>
+    
     <script>
         function pembayaranPopup(item) {
             let idAkun = document.querySelector("input[name='id_akun_game']");

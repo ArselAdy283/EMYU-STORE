@@ -20,6 +20,18 @@ function instagramPopup() {
 }
 
 // =====================================
+// emyucoin.php
+// =====================================
+function qrisPopup() {
+    fetch("qris.php")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("qrisPopupContent").innerHTML = html;
+            document.getElementById("qrisPopup").classList.remove("hidden");
+        });
+}
+
+// =====================================
 // admin.php
 // =====================================
 
@@ -205,29 +217,29 @@ chatForm.addEventListener('submit', async (e) => {
 
 // ==== POPUP GAMBAR ====
 document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.getElementById("imagePopup");
-  const popupImg = document.getElementById("popupImg");
-  const closePopup = document.getElementById("closePopup");
+    const popup = document.getElementById("imagePopup");
+    const popupImg = document.getElementById("popupImg");
+    const closePopup = document.getElementById("closePopup");
 
-  // 🔹 Delegasi event klik untuk gambar di dalam chatContainer
-  document.getElementById("chatContainer").addEventListener("click", (e) => {
-    if (e.target.tagName === "IMG") {
-      popupImg.src = e.target.src;
-      popup.classList.remove("hidden");
-    }
-  });
+    // 🔹 Delegasi event klik untuk gambar di dalam chatContainer
+    document.getElementById("chatContainer").addEventListener("click", (e) => {
+        if (e.target.tagName === "IMG") {
+            popupImg.src = e.target.src;
+            popup.classList.remove("hidden");
+        }
+    });
 
-  // Tutup popup saat klik tombol X
-  closePopup.addEventListener("click", () => {
-    popup.classList.add("hidden");
-    popupImg.src = "";
-  });
+    // Tutup popup saat klik tombol X
+    closePopup.addEventListener("click", () => {
+        popup.classList.add("hidden");
+        popupImg.src = "";
+    });
 
-  // Tutup popup saat klik area hitam luar
-  popup.addEventListener("click", (e) => {
-    if (e.target === popup) {
-      popup.classList.add("hidden");
-      popupImg.src = "";
-    }
-  });
+    // Tutup popup saat klik area hitam luar
+    popup.addEventListener("click", (e) => {
+        if (e.target === popup) {
+            popup.classList.add("hidden");
+            popupImg.src = "";
+        }
+    });
 });

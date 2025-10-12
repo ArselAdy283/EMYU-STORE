@@ -28,7 +28,7 @@ if (!isset($_SESSION['username'])) {
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
                 <div class="flex items-center gap-6">
                     <div>
-                        <img src="uploads/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" class="w-20 h-20 rounded-full object-cover">
+                        <img src="profile_pic/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" class="w-20 h-20 rounded-full object-cover">
                     </div>
 
                     <div class="flex-1">
@@ -42,9 +42,9 @@ if (!isset($_SESSION['username'])) {
 
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 rounded-2xl p-8 shadow-2xl">
                 <div class="grid grid-cols-3 gap-6 text-white text-center">
-                    <a href="orders.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
-                        <img src="assets/tray.svg" alt="history" class="w-14 h-14 invert">
-                        <div class="mt-1 text-lg">Orders</div>
+                    <a href="emyucoin.php" class="flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110">
+                        <img src="assets/coins.svg" alt="history" class="w-14 h-14 invert">
+                        <div class="mt-1 text-lg">Emyucoin</div>
                     </a>
 
                     <button onclick="document.getElementById('settingPopup').classList.remove('hidden')"
