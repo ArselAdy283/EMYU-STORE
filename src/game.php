@@ -13,7 +13,8 @@ $query = mysqli_query(
             i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
      FROM games g
      JOIN items i ON g.id_game = i.id_game
-     WHERE g.id_game = $game"
+     WHERE g.id_game = $game
+     ORDER BY CAST(i.jumlah_item AS UNSIGNED) ASC"
 );
 $dataGame = mysqli_fetch_assoc($query);
 
@@ -104,7 +105,7 @@ if ($id_user) {
                             <p class="text-white text-sm font-semibold">
                                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                             </p>
-                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </button>
                     <?php else: ?>
                         <!-- Belum login -->

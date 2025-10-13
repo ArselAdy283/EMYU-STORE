@@ -16,10 +16,10 @@ if ($tipe === 'emyucoin') {
     // Ambil data order EMYUCOIN
     $stmt = $koneksi->prepare("
         SELECT o.id, o.status, o.tanggal, o.bukti_transfer,
-               e.jumlah as emyu_jumlah, e.harga
+           e.jumlah as emyu_jumlah, e.harga
         FROM orders_emyucoin o
         JOIN emyucoin e ON o.id_emyucoin = e.id_emyucoin
-        WHERE o.id_user = ?
+        WHERE o.id_user = ? AND o.is_hidden = 0
         ORDER BY o.tanggal DESC
     ");
     $stmt->bind_param("i", $id_user);
@@ -86,11 +86,23 @@ $result = $stmt->get_result();
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr class="odd:bg-[color:#171717] even:bg-[color:#333333] hover:bg-red-600/60 transition text-center">
                             <td class="px-6 py-6"><?= htmlspecialchars($row['tanggal']); ?></td>
-                            <td class="px-6 py-6"><?= htmlspecialchars($row['jumlah']); ?></td>
-                            <td class="px-6 py-6"><?= htmlspecialchars($row['harga']); ?></td>
+                            <td class="px-6 py-6 flex item-center justify-center gap-2"><span class="text-[#ffed00]">EC</span><?= htmlspecialchars($row['emyu_jumlah']); ?></td>
                             <td class="px-6 py-6">
+                                <div class="flex gap-2 justify-center text-yellow-400 font-bold">
+                                    <span>IDR</span>
+                                    <span><?= number_format($row['harga'], 0, ',', '.'); ?></span>
+                                </div></td>
+                            <td class="px-6 py-6 flex justify-center">
                                 <?php if ($row['status'] === 'done'): ?>
-                                    <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">done</span>
+                                    <div class="flex">
+                                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">done</span>
+                                        <form method="post" action="hide_order.php" class="inline">
+                                            <input type="hidden" name="id_order_emyucoin" value="<?= $row['id']; ?>">
+                                            <button type="submit" class="ml-2 bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold hover:bg-gray-700">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 <?php else: ?>
                                     <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">pending</span>
                                 <?php endif; ?>
@@ -130,7 +142,7 @@ $result = $stmt->get_result();
                             </td>
                             <td class="px-6 py-10 text-yellow-400 font-bold">
                                 <div class="flex gap-2">
-                                    <span>IDR</span>
+                                    <span>EC</span>
                                     <span><?= number_format($row['harga_item'], 0, ',', '.'); ?></span>
                                 </div>
                             </td>

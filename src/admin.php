@@ -13,37 +13,81 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 $filter = $_GET['filter'] ?? 'all';
+$tipe = $_GET['tipe'] ?? 'game';
 
-$query = "
-          SELECT o.id_order, o.tanggal, o.status,
-          u.username, o.akun_game_info,
-          i.nama_item, i.jumlah_item, i.harga_item, i.icon_item,
-          g.nama_game, g.icon_game
-          FROM orders o
-          JOIN users u ON o.id_user = u.id_user
-          JOIN items i ON o.id_item = i.id_item
-          JOIN games g ON i.id_game = g.id_game
-          ";
+// Ambil data sesuai tipe order
+if ($tipe === 'emyucoin') {
+  $query = "
+        SELECT 
+            oe.id AS id_order,
+            oe.tanggal,
+            oe.status,
+            oe.bukti_transfer,
+            e.jumlah AS jumlah_emyu,
+            e.harga AS harga_emyu,
+            u.username
+        FROM orders_emyucoin oe
+        JOIN emyucoin e ON oe.id_emyucoin = e.id_emyucoin
+        JOIN users u ON oe.id_user = u.id_user
+    ";
 
-if ($filter === 'pending') {
-  $query .= " WHERE o.status = 'pending'";
-} elseif ($filter === 'done') {
-  $query .= " WHERE o.status = 'done'";
+  // Filter status
+  if ($filter === 'pending') {
+    $query .= " WHERE oe.status = 'pending'";
+  } elseif ($filter === 'done') {
+    $query .= " WHERE oe.status = 'done'";
+  }
+
+  $query .= " ORDER BY oe.tanggal DESC";
+} else {
+  $query = "
+        SELECT 
+            o.id_order,
+            o.tanggal,
+            o.status,
+            o.akun_game_info,
+            i.nama_item,
+            i.jumlah_item,
+            i.harga_item,
+            i.icon_item,
+            g.nama_game,
+            g.icon_game,
+            u.username
+        FROM orders o
+        JOIN items i ON o.id_item = i.id_item
+        JOIN games g ON i.id_game = g.id_game
+        JOIN users u ON o.id_user = u.id_user
+    ";
+
+  // Filter status
+  if ($filter === 'pending') {
+    $query .= " WHERE o.status = 'pending'";
+  } elseif ($filter === 'done') {
+    $query .= " WHERE o.status = 'done'";
+  }
+
+  $query .= " ORDER BY o.tanggal DESC";
 }
 
-$query .= " ORDER BY o.tanggal DESC";
-
 $result = $koneksi->query($query);
+if (!$result) {
+  die("Query error: " . $koneksi->error);
+}
 
-$totalOrders = $koneksi->query("SELECT COUNT(*) as total FROM orders")->fetch_assoc()['total'];
-$totalPending = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status = 'pending'")->fetch_assoc()['total'];
-$totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status = 'done'")->fetch_assoc()['total'];
+if ($tipe === 'emyucoin') {
+  $totalOrders = $koneksi->query("SELECT COUNT(*) as total FROM orders_emyucoin")->fetch_assoc()['total'];
+  $totalPending = $koneksi->query("SELECT COUNT(*) as total FROM orders_emyucoin WHERE status = 'pending'")->fetch_assoc()['total'];
+  $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders_emyucoin WHERE status = 'done'")->fetch_assoc()['total'];
+} else {
+  $totalOrders = $koneksi->query("SELECT COUNT(*) as total FROM orders")->fetch_assoc()['total'];
+  $totalPending = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status = 'pending'")->fetch_assoc()['total'];
+  $totalDone = $koneksi->query("SELECT COUNT(*) as total FROM orders WHERE status = 'done'")->fetch_assoc()['total'];
+}
 
 $id_user = $_SESSION['id_user'];
-$query = $koneksi->query("SELECT emyucoin FROM saldo_user WHERE id_user = $id_user");
+$query = $koneksi->query("SELECT emyucoin FROM emyucoin_user WHERE id_user = $id_user");
 $row = $query->fetch_assoc();
 $emyucoin = $row['emyucoin'] ?? 0;
-
 
 ?>
 
@@ -108,7 +152,7 @@ $emyucoin = $row['emyucoin'] ?? 0;
     <ul class="flex space-x-8 text-xl text-white items-center">
       <div class="font-sm text-lg bg-[color:#212121]/70 w-[200px] pl-3 pr-3 py-1 rounded-[2px] flex justify-between items-center">
         <span>
-          <span class="text-[#db2525]">EC</span> <?= number_format($emyucoin, 0) ?>
+          <span class="text-[#db2525]">EC</span> <?= number_format($emyucoin, 0, ',', '.') ?>
         </span>
         <a href="emyucoin.php" class="bg-[color:#18181c] px-2 rounded-[2px] translate-x-[7px] text-[#db2525] hover:bg-[color:#18181c]/70">+</a>
       </div>
@@ -148,9 +192,23 @@ $emyucoin = $row['emyucoin'] ?? 0;
       <!-- ==================================================/ORDER/========================================================== -->
 
       <?php if ($page === 'orders'): ?>
+
         <div class="flex gap-4 mb-10">
           <img src="assets/tray.svg" class="invert" />
           <h1 class="text-3xl font-bold">Orders</h1>
+        </div>
+
+        <div class="flex justify-center gap-4 mb-6">
+          <a href="admin.php?page=orders&tipe=game&filter=<?= htmlspecialchars($filter) ?>"
+            class="px-6 py-2 rounded-full font-semibold transition
+            <?= $tipe === 'game' ? 'bg-red-600 text-white' : 'bg-gray-600 hover:bg-gray-700' ?>">
+            Order Game
+          </a>
+          <a href="admin.php?page=orders&tipe=emyucoin&filter=<?= htmlspecialchars($filter) ?>"
+            class="px-6 py-2 rounded-full font-semibold transition
+            <?= $tipe === 'emyucoin' ? 'bg-red-600 text-white' : 'bg-gray-600 hover:bg-gray-700' ?>">
+            Order Emyucoin
+          </a>
         </div>
 
         <section class="grid grid-cols-3 gap-6 mb-10">
@@ -169,78 +227,147 @@ $emyucoin = $row['emyucoin'] ?? 0;
         </section>
 
         <div class="mb-10 flex gap-4">
-          <a href="admin.php?page=orders&filter=all" class="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700">Semua</a>
-          <a href="admin.php?page=orders&filter=pending" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700">Pending</a>
-          <a href="admin.php?page=orders&filter=done" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700">Done</a>
+          <a href="admin.php?page=orders&tipe=<?= htmlspecialchars($tipe) ?>&filter=all"
+            class="px-4 py-2 rounded-lg <?= $filter === 'all' ? 'bg-gray-700' : 'bg-gray-600 hover:bg-gray-700' ?>">Semua</a>
+          <a href="admin.php?page=orders&tipe=<?= htmlspecialchars($tipe) ?>&filter=pending"
+            class="px-4 py-2 rounded-lg <?= $filter === 'pending' ? 'bg-red-700' : 'bg-red-600 hover:bg-red-700' ?>">Pending</a>
+          <a href="admin.php?page=orders&tipe=<?= htmlspecialchars($tipe) ?>&filter=done"
+            class="px-4 py-2 rounded-lg <?= $filter === 'done' ? 'bg-green-700' : 'bg-green-600 hover:bg-green-700' ?>">Done</a>
         </div>
 
-        <div class="table-container">
-          <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
-            <thead class="bg-[color:#db2525] text-white text-center uppercase text-base">
-              <tr>
-                <th class="px-4 py-3">Tanggal</th>
-                <th class="px-4 py-3">Game</th>
-                <th class="px-4 py-3">User</th>
-                <th class="px-4 py-3">Akun Game</th>
-                <th class="px-4 py-3">Item</th>
-                <th class="px-4 py-3">Harga</th>
-                <th class="px-4 py-3">Status</th>
-                <th class="px-4 py-3">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php while ($row = $result->fetch_assoc()): ?>
-                <tr class="odd:bg-[color:#18181c] even:bg-[color:#212121] hover:bg-red-600/60 transition">
-                  <td class="px-4 py-4"><?= $row['tanggal']; ?></td>
-                  <td class="px-4 py-4 font-semibold">
-                    <div class="flex items-center gap-3">
-                      <img src="assets/<?= $row['icon_game']; ?>" alt="<?= $row['nama_game']; ?>" class="w-8 h-8">
-                      <span><?= $row['nama_game']; ?></span>
-                    </div>
-                  </td>
-                  <td class="px-4 py-4"><?= $row['username']; ?></td>
-                  <td class="px-4 py-4">
-                    <?= !empty($row['akun_game_info']) ? $row['akun_game_info'] : "-" ?>
-                  </td>
 
-                  <td class="px-4 py-4">
-                    <div class="flex items-center gap-3">
-                      <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-8 h-8">
-                      <span><?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?></span>
-                    </div>
-                  </td>
-                  <td class="px-4 py-4 text-yellow-400 font-bold">
-                    <div class="flex gap-2">
-                      <span>IDR</span>
-                      <span><?= number_format($row['harga_item'], 0, ',', '.') ?></span>
-                    </div>
-                  </td>
-                  <td class="px-4 py-4">
-                    <?php if ($row['status'] === 'done'): ?>
-                      <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Done</span>
-                    <?php elseif ($row['status'] === 'pending'): ?>
-                      <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">Pending</span>
-                    <?php else: ?>
-                      <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= $row['status'] ?></span>
-                    <?php endif; ?>
-                  </td>
-                  <td class="px-4 py-4 text-center">
-                    <?php if ($row['status'] === 'pending'): ?>
-                      <form method="post" action="update_order.php" class="inline">
-                        <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
-                        <input type="hidden" name="filter" value="<?= htmlspecialchars($filter); ?>">
-                        <button type="submit" class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition">
-                          Selesai
-                        </button>
-                      </form>
-                    <?php else: ?>
-                      <span class="text-gray-400 text-sm">Tidak ada aksi</span>
-                    <?php endif; ?>
-                  </td>
+        <div class="table-container">
+          <?php if ($tipe === 'emyucoin'): ?>
+            <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
+              <thead class="bg-[color:#db2525] text-white text-center uppercase text-base">
+                <tr>
+                  <th class="px-4 py-3">Tanggal</th>
+                  <th class="px-4 py-3">User</th>
+                  <th class="px-4 py-3">Jumlah Emyucoin</th>
+                  <th class="px-4 py-3">Harga</th>
+                  <th class="px-4 py-3">Bukti Transfer</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3">Aksi</th>
                 </tr>
-              <?php endwhile; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr class="odd:bg-[color:#18181c] even:bg-[color:#212121] hover:bg-red-600/60 transition">
+                    <td class="px-4 py-4"><?= $row['tanggal']; ?></td>
+                    <td class="px-4 py-4"><?= htmlspecialchars($row['username']); ?></td>
+                    <td class="px-4 py-4 font-semibold text-white">
+                      <span class="text-yellow-400">EC</span> <?= number_format($row['jumlah_emyu'], 0, ',', '.'); ?>
+                    </td>
+                    <td class="px-4 py-4 text-yellow-400 font-bold">
+                      IDR <?= number_format($row['harga_emyu'], 0, ',', '.'); ?>
+                    </td>
+                    <td class="px-4 py-4">
+                      <?php if (!empty($row['bukti_transfer'])): ?>
+                        <a href="#" data-bukti="bukti_transfer/<?= htmlspecialchars($row['bukti_transfer']); ?>"
+                          class="underline text-blue-400 hover:text-blue-300">Lihat</a>
+                      <?php else: ?>
+                        <span class="text-gray-400">Belum ada</span>
+                      <?php endif; ?>
+                    </td>
+                    <td class="px-4 py-4">
+                      <?php if ($row['status'] === 'done'): ?>
+                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Done</span>
+                      <?php elseif ($row['status'] === 'pending'): ?>
+                        <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                      <?php else: ?>
+                        <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= htmlspecialchars($row['status']); ?></span>
+                      <?php endif; ?>
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                      <?php if ($row['status'] === 'pending'): ?>
+                        <form method="post" action="update_order_emyucoin.php" class="inline">
+                          <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
+                          <input type="hidden" name="filter" value="<?= htmlspecialchars($filter); ?>">
+                          <button type="submit"
+                            class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition">
+                            Selesai
+                          </button>
+                        </form>
+                      <?php else: ?>
+                        <span class="text-gray-400 text-sm">Tidak ada aksi</span>
+                      <?php endif; ?>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              </tbody>
+            </table>
+
+            <div id="buktiTransferPopup"
+              class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+              <img id="popupBukti" src="" alt="Preview" class="max-w-[90%] max-h-[90%] rounded-lg border border-gray-700 shadow-lg">
+              <button id="closeBuktiTransferPopup"
+                class="absolute top-6 right-6 text-white text-2xl font-bold hover:text-[#db2525] transition">✕</button>
+            </div>
+
+          <?php else: ?>
+            <!-- ============== TABEL UNTUK ORDER GAME ============== -->
+            <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
+              <thead class="bg-[color:#db2525] text-white text-center uppercase text-base">
+                <tr>
+                  <th class="px-4 py-3">Tanggal</th>
+                  <th class="px-4 py-3">Game</th>
+                  <th class="px-4 py-3">User</th>
+                  <th class="px-4 py-3">Akun Game</th>
+                  <th class="px-4 py-3">Item</th>
+                  <th class="px-4 py-3">Harga</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr class="odd:bg-[color:#18181c] even:bg-[color:#212121] hover:bg-red-600/60 transition">
+                    <td class="px-4 py-4"><?= $row['tanggal']; ?></td>
+                    <td class="px-4 py-4 font-semibold">
+                      <div class="flex items-center gap-3">
+                        <img src="assets/<?= htmlspecialchars($row['icon_game']); ?>" alt="<?= htmlspecialchars($row['nama_game']); ?>" class="w-8 h-8">
+                        <span><?= htmlspecialchars($row['nama_game']); ?></span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4"><?= htmlspecialchars($row['username']); ?></td>
+                    <td class="px-4 py-4"><?= !empty($row['akun_game_info']) ? htmlspecialchars($row['akun_game_info']) : '-' ?></td>
+                    <td class="px-4 py-4">
+                      <div class="flex items-center gap-3">
+                        <img src="assets/<?= htmlspecialchars($row['icon_item']); ?>" alt="<?= htmlspecialchars($row['nama_item']); ?>" class="w-8 h-8">
+                        <span><?= $row['jumlah_item']; ?> <?= htmlspecialchars($row['nama_item']); ?></span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-yellow-400 font-bold">
+                      EC <?= number_format($row['harga_item'], 0, ',', '.'); ?>
+                    </td>
+                    <td class="px-4 py-4">
+                      <?php if ($row['status'] === 'done'): ?>
+                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">Done</span>
+                      <?php elseif ($row['status'] === 'pending'): ?>
+                        <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+                      <?php else: ?>
+                        <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= htmlspecialchars($row['status']); ?></span>
+                      <?php endif; ?>
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                      <?php if ($row['status'] === 'pending'): ?>
+                        <form method="post" action="update_order.php" class="inline">
+                          <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
+                          <input type="hidden" name="filter" value="<?= htmlspecialchars($filter); ?>">
+                          <button type="submit"
+                            class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition">
+                            Selesai
+                          </button>
+                        </form>
+                      <?php else: ?>
+                        <span class="text-gray-400 text-sm">Tidak ada aksi</span>
+                      <?php endif; ?>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              </tbody>
+            </table>
+          <?php endif; ?>
         </div>
 
         <!-- ===================================================/ITEM/=============================================================== -->
@@ -251,96 +378,80 @@ $emyucoin = $row['emyucoin'] ?? 0;
           <h1 class='text-3xl font-bold'>Item</h1>
         </div>
 
-        <!-- Mobile Legend -->
-        <div class="flex items-center gap-4 mb-10">
-          <img src="assets/mlbb-logo.jpg" alt="mlbb" class="w-16 h-16 rounded-xl" />
-          <h1 class="text-2xl font-bold">Mobile Legend: Bang Bang</h1>
+        <!-- ========== DAFTAR GAME ITEM ========== -->
+        <?php
+        $games = mysqli_query($koneksi, "SELECT * FROM games");
+        while ($game = mysqli_fetch_assoc($games)):
+        ?>
+          <div class="flex justify-between items-center mb-20 mt-10">
+            <div class="flex items-center gap-4 translate-x-[160px]">
+              <img src="assets/<?= $game['icon_game']; ?>" alt="<?= htmlspecialchars($game['nama_game']); ?>" class="w-16 h-16 rounded-xl" />
+              <h1 class="text-2xl font-bold"><?= htmlspecialchars($game['nama_game']); ?></h1>
+            </div>
+            <button onclick="openAddPopup('<?= $game['id_game']; ?>')"
+              class="bg-[#db2525] hover:bg-red-700 px-4 py-2 rounded-lg font-semibold transition translate-x-[-160px]">
+              + Tambah Item
+            </button>
+          </div>
+
+          <?php
+          $items = mysqli_query($koneksi, "
+      SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
+      FROM items i
+      WHERE i.id_game = {$game['id_game']}
+      ORDER BY CAST(i.jumlah_item AS UNSIGNED) ASC
+    ");
+          ?>
+          <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto">
+            <?php while ($row = mysqli_fetch_assoc($items)) : ?>
+              <button onclick="editItemPopup('item', '<?= $row['id_item']; ?>')"
+                class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
+                <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
+                <p class="text-white text-sm font-semibold">
+                  <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
+                </p>
+                <p class="text-yellow-400 text-sm font-bold">
+                  EC <?= number_format($row['harga_item'], 0, ',', '.'); ?>
+                </p>
+              </button>
+            <?php endwhile; ?>
+          </div>
+        <?php endwhile; ?>
+
+        <!-- Tombol Tambah Produk Emyucoin -->
+        <div class="flex justify-between items-center mb-20 mt-10">
+          <div class="flex items-center gap-4 translate-x-[160px]">
+            <img src="assets/coins.svg" alt="emyucoin" class="w-20 h-20 invert" />
+            <h1 class="text-2xl font-bold">Emyucoin</h1>
+          </div>
+          <button onclick="openAddPopup('emyucoin')"
+            class="bg-[#db2525] hover:bg-red-700 px-4 py-2 rounded-lg font-semibold transition translate-x-[-160px]">
+            + Tambah Emyucoin
+          </button>
         </div>
 
         <?php
-        $ml = mysqli_query($koneksi, "
-          SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
-          FROM items i 
-          JOIN games g ON i.id_game = g.id_game
-          WHERE g.nama_game = 'Mobile Lagends: Bang Bang'
-        ");
+        $emyucoin = mysqli_query($koneksi, "SELECT * FROM emyucoin ORDER BY harga ASC");
         ?>
-        <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto">
-          <?php
-          while ($row = mysqli_fetch_assoc($ml)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
-              <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
-              <p class="text-white text-sm font-semibold">
-                <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
+        <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto mb-16">
+          <?php while ($row = mysqli_fetch_assoc($emyucoin)) : ?>
+            <button onclick="editItemPopup('emyucoin', '<?= $row['id_emyucoin']; ?>')"
+              class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
+              <img src="assets/coins.svg" alt="emyucoin" class="w-20 h-20 mb-3 invert">
+              <p class="text-yellow-400 text-sm font-semibold">
+                EC <?= number_format($row['jumlah'], 0, ',', '.'); ?>
               </p>
-              <p class="text-yellow-400 text-sm font-bold">
-                IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?>
+              <p class="text-white text-sm font-bold">
+                IDR <?= number_format($row['harga'], 0, ',', '.'); ?>
               </p>
             </button>
           <?php endwhile; ?>
         </div>
 
-
-        <!-- eFootball -->
-        <div class="flex items-center gap-4 mb-10 mt-16">
-          <img src="assets/efootball-logo.jpg" alt="efootball" class="w-16 h-16 rounded-xl" />
-          <h1 class="text-2xl font-bold">eFootball™</h1>
-        </div>
-
-        <?php
-        $ef = mysqli_query($koneksi, "
-          SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
-          FROM items i 
-          JOIN games g ON i.id_game = g.id_game
-          WHERE g.nama_game = 'eFootball™'
-        ");
-        ?>
-        <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto" data-item="<?= $row['id_item']; ?>">
-          <?php
-          while ($row = mysqli_fetch_assoc($ef)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
-              <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
-              <p class="text-white text-sm font-semibold">
-                <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
-              </p>
-              <p class="text-yellow-400 text-sm font-bold">
-                IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?>
-              </p>
-            </button>
-          <?php endwhile; ?>
-        </div>
-
-
-        <!-- Free Fire -->
-        <div class="flex items-center gap-4 mb-10 mt-16">
-          <img src="assets/ff-logo.jpg" alt="ff" class="w-16 h-16 rounded-xl" />
-          <h1 class="text-2xl font-bold">Free Fire</h1>
-        </div>
-        <?php
-        $ff = mysqli_query($koneksi, "
-          SELECT i.id_item, i.nama_item, i.jumlah_item, i.icon_item, i.harga_item 
-          FROM items i 
-          JOIN games g ON i.id_game = g.id_game
-          WHERE g.nama_game = 'Free Fire'
-        ");
-        ?>
-        <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto" data-item="<?= $row['id_item']; ?>">
-          <?php
-          while ($row = mysqli_fetch_assoc($ff)) : ?>
-            <button onclick="editItemPopup('<?= $row['id_item']; ?>')" class="aspect-square bg-[#18181c] backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer">
-              <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-3">
-              <p class="text-white text-sm font-semibold">
-                <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
-              </p>
-              <p class="text-yellow-400 text-sm font-bold">
-                IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?>
-              </p>
-            </button>
-          <?php endwhile; ?>
-        </div>
+        <!-- POPUP FORM TAMBAH DAN EDIT -->
         <div id="editItemPopup"
           class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-          <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
+          <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-auto p-6 relative">
             <button onclick="document.getElementById('editItemPopup').classList.add('hidden')"
               class="absolute top-4 right-6 text-white hover:text-[#db2525] transition text-xl">✖</button>
 

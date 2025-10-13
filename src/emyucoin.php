@@ -2,7 +2,11 @@
 include 'koneksi.php';
 session_start();
 
-// Ambil data paket dari tabel emyucoin
+if (!isset($_SESSION['id_user'])) {
+  header('Location: login.php');
+  exit;
+}
+
 $query = $koneksi->query("SELECT * FROM emyucoin ORDER BY jumlah ASC");
 $paket = $query->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -25,16 +29,16 @@ $paket = $query->fetch_all(MYSQLI_ASSOC);
     ?>
 
     <div class="container mx-auto py-10 px-6">
-        <h1 class="text-3xl font-bold mb-6 text-yellow-300">💰 Beli EMYUCOIN</h1>
+        <h1 class="text-center text-3xl font-bold mb-6 text-yellow-300">EMYUCOIN</h1>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php foreach ($paket as $row): ?>
                 <div class="bg-red-800/70 p-6 rounded-2xl shadow-lg transform transition duration-300 hover:scale-110">
                     <h2 class="text-2xl font-bold text-yellow-300 mb-3">
-                        <?= number_format($row['jumlah']) ?> EC
+                        EC <?= number_format($row['jumlah'], 0, ',', '.') ?>
                     </h2>
-                    <p class="text-lg mb-4">Rp <?= number_format($row['harga'], 0, ',', '.') ?></p>
-                    <button onclick="qrisPopup()" class="w-full bg-yellow-400 text-gray-900 font-bold py-2 rounded-xl hover:bg-yellow-300 transition">
+                    <p class="text-lg mb-4">IDR <?= number_format($row['harga'], 0, ',', '.') ?></p>
+                    <button onclick="qrisPopup('<?= $row['id_emyucoin']; ?>')" class="w-full bg-yellow-400 text-gray-900 font-bold py-2 rounded-xl hover:bg-yellow-300 transition">
                         Beli Sekarang
                     </button>
                     </form>

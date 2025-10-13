@@ -56,7 +56,7 @@ $display_name = $_SESSION['display_name'] ?? $_SESSION['username'];
         <h2 class="text-xl font-semibold">
             <?= htmlspecialchars($item['jumlah_item']); ?> <?= htmlspecialchars($item['nama_item']); ?>
         </h2>
-        <p class="text-[#ffed00] text-lg font-semibold">IDR <?= number_format($item['harga_item'], 0, ',', '.'); ?></p>
+        <p class="text-[#ffed00] text-lg font-semibold">EC <?= number_format($item['harga_item'], 0, ',', '.'); ?></p>
 
         <div class="mt-6 text-lg bg-red-800 p-2 rounded-[5px]">
             <?php if ($id_akun_game): ?>
