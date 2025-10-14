@@ -16,6 +16,6 @@ $stmt = $koneksi->prepare("UPDATE emyucoin SET jumlah = ?, harga = ? WHERE id_em
 $stmt->bind_param("dii", $jumlah, $harga, $id_emyucoin);
 $stmt->execute();
 
-header("Location: admin.php?page=emyucoin");
+header("Location: admin.php?page=item&success=1");
 exit;
 ?>

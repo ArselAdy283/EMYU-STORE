@@ -1,10 +1,5 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
-  header('Location: login.php');
-  exit;
-}
-
 include 'koneksi.php';
 ?>
 <!doctype html>
@@ -13,47 +8,69 @@ include 'koneksi.php';
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Inbox - EMYUSTORE</title>
+  <title>Promo & Pengumuman - EMYUSTORE</title>
   <link href="./output.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* line-clamp manual untuk browser lama */
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
 </head>
 
-<body class="overflow-x-hidden overflow-y-scroll min-h-screen bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] font-sans text-white">
+<body class="bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] text-white">
   <?php include 'navbar.php'; ?>
 
-  <div class="max-w-2xl mx-auto p-6">
-    <div class="flex gap-4 mb-6">
-      <img src="assets/message.svg" class="invert translate-y-[-5px] w-8 h-8" />
-      <h1 class="text-3xl font-bold">Inbox</h1>
-    </div>
-
-    <div id="chatContainer" class="bg-[#18181c] rounded-xl p-6 h-[500px] overflow-y-auto flex flex-col space-y-4">
+  <div class="max-w-6xl mx-auto px-4 py-10">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <?php
       $messages = $koneksi->query("
         SELECT inbox.id_inbox, inbox.message, inbox.created_at, inbox.image_path, users.display_name
         FROM inbox
         JOIN users ON inbox.id_user = users.id_user
-        ORDER BY inbox.created_at ASC
+        ORDER BY inbox.created_at DESC
       ");
       while ($msg = $messages->fetch_assoc()):
       ?>
-        <div class="flex <?= $msg['display_name'] === $_SESSION['username'] ? 'justify-end' : 'justify-start' ?>">
-          <div class="max-w-[75%] <?= $msg['display_name'] === $_SESSION['username']
-              ? 'bg-[#db2525] text-white rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl'
-              : 'bg-[#2a2a2a] text-gray-100 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl' ?> px-4 py-3 relative">
+        <div class="bg-red-800/70 backdrop-blur-md rounded-xl overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 flex flex-col h-full min-h-[420px]">
+          
+          <?php if (!empty($msg['image_path'])): ?>
+            <div class="bg-black/20 flex items-center justify-center p-2">
+              <img src="<?= htmlspecialchars($msg['image_path']) ?>"
+                class="w-full h-56 object-cover rounded-md cursor-pointer transition hover:scale-[1.02]"
+                onclick="showImagePopup('<?= htmlspecialchars($msg['image_path']) ?>')">
+            </div>
+          <?php else: ?>
+            <div class="h-48 bg-gradient-to-br from-[#ff3c2f]/40 to-[#1a1a1e] flex items-center justify-center text-gray-400 italic">
+              Tidak ada gambar
+            </div>
+          <?php endif; ?>
 
-            <div class="flex items-center gap-2 mb-1">
-              <span class="font-semibold text-sm text-[#ffb4b4]"><?= htmlspecialchars($msg['display_name']) ?></span>
-              <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])) ?></span>
+          <div class="p-5 flex-grow flex flex-col justify-between">
+            <div>
+              <div class="text-xs text-[#ffb4b4] font-semibold mb-1">
+                <?= strtoupper(date('d M Y', strtotime($msg['created_at']))) ?> · PENGUMUMAN
+              </div>
+
+              <h2 class="font-bold text-lg text-white mb-2 line-clamp-3">
+                <?= nl2br(htmlspecialchars($msg['message'])) ?>
+              </h2>
             </div>
 
-            <p class="text-sm leading-snug"><?= nl2br(htmlspecialchars($msg['message'])) ?></p>
-
-            <?php if (!empty($msg['image_path'])): ?>
-              <img src="<?= htmlspecialchars($msg['image_path']) ?>"
-                   class="mt-3 max-w-[250px] rounded-lg border border-gray-600 cursor-pointer hover:opacity-80 transition"
-                   onclick="showImagePopup('<?= htmlspecialchars($msg['image_path']) ?>')">
+            <?php if (strlen($msg['message']) > 150): ?>
+              <button onclick="showTextPopup(`<?= htmlspecialchars(addslashes($msg['message'])) ?>`)"
+                class="mt-2 text-[#ffb4b4] hover:text-[#ff3939] text-sm font-semibold transition self-start">
+                Baca selengkapnya
+              </button>
             <?php endif; ?>
+          </div>
+
+          <div class="border-t border-[#2a2a2f] px-5 py-3 text-xs text-[#ffb4b4] flex justify-between items-center">
+            <span>Diumumkan oleh <b><?= htmlspecialchars($msg['display_name']) ?></b></span>
           </div>
         </div>
       <?php endwhile; ?>
@@ -64,12 +81,22 @@ include 'koneksi.php';
   <div id="imagePopup" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
     <img id="popupImg" src="" alt="Preview"
       class="max-w-[90%] max-h-[90%] rounded-lg border border-gray-700 shadow-lg">
-    <button id="closePopup" class="absolute top-6 right-6 text-white text-2xl font-bold hover:text-[#db2525] transition">✕</button>
+    <button id="closePopup" class="absolute top-6 right-6 text-white text-2xl font-bold hover:text-[#ffed00] transition">✕</button>
+  </div>
+
+  <!-- Popup Teks -->
+  <div id="textPopup" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="bg-red-800 max-w-2xl w-full max-h-[80vh] rounded-xl p-6 overflow-y-auto relative text-white shadow-xl">
+      <button id="closeTextPopup" class="absolute top-3 right-3 text-xl text-[#ffb4b4] hover:text-[#ffed00]">✕</button>
+      <h3 class="text-[#ffb4b4] font-semibold mb-3">Detail Pengumuman</h3>
+      <p id="popupText" class="whitespace-pre-line leading-relaxed"></p>
+    </div>
   </div>
 
   <script>
-    // Popup gambar
+    // === Popup Gambar ===
     function showImagePopup(src) {
+      if (!src) return;
       const popup = document.getElementById('imagePopup');
       const popupImg = document.getElementById('popupImg');
       popupImg.src = src;
@@ -85,6 +112,26 @@ include 'koneksi.php';
       if (e.target === e.currentTarget) {
         e.currentTarget.classList.add('hidden');
         document.getElementById('popupImg').src = '';
+      }
+    });
+
+    // === Popup Teks ===
+    function showTextPopup(text) {
+      const popup = document.getElementById('textPopup');
+      const popupText = document.getElementById('popupText');
+      popupText.textContent = text;
+      popup.classList.remove('hidden');
+    }
+
+    document.getElementById('closeTextPopup').addEventListener('click', () => {
+      document.getElementById('textPopup').classList.add('hidden');
+      document.getElementById('popupText').textContent = '';
+    });
+
+    document.getElementById('textPopup').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        e.currentTarget.classList.add('hidden');
+        document.getElementById('popupText').textContent = '';
       }
     });
   </script>

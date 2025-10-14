@@ -21,5 +21,5 @@ $msg = $result->fetch_assoc();
     <span class="text-xs text-gray-400"><?= date('d M H:i', strtotime($msg['created_at'])); ?></span>
   </div>
   <p class="text-gray-200 mt-1"><?= nl2br(htmlspecialchars($msg['message'])); ?></p>
-  <img src=" <?= htmlspecialchars($msg['image_path']) ?>" class="max-w-[250px] rounded-lg mt-3 border border-gray-700"/>
+  <img src=" <?= htmlspecialchars($msg['image_path']) ?>" class="max-w-[250px] rounded-lg mt-3 border border-gray-700""/>
 </div>

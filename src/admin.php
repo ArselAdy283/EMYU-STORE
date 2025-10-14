@@ -288,6 +288,13 @@ $emyucoin = $row['emyucoin'] ?? 0;
                             Selesai
                           </button>
                         </form>
+                        <form method="post" action="delete_order_emyucoin.php" class="inline" onsubmit="return confirm('Yakin ingin menghapus pesanan ini?');">
+                          <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
+                          <button type="submit"
+                            class="bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-red-700 transition ml-2">
+                            Hapus
+                          </button>
+                        </form>
                       <?php else: ?>
                         <span class="text-gray-400 text-sm">Tidak ada aksi</span>
                       <?php endif; ?>
@@ -349,7 +356,7 @@ $emyucoin = $row['emyucoin'] ?? 0;
                         <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold"><?= htmlspecialchars($row['status']); ?></span>
                       <?php endif; ?>
                     </td>
-                    <td class="px-4 py-4 text-center">
+                    <td class="px-4 py-4 flex text-center">
                       <?php if ($row['status'] === 'pending'): ?>
                         <form method="post" action="update_order.php" class="inline">
                           <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
@@ -357,6 +364,13 @@ $emyucoin = $row['emyucoin'] ?? 0;
                           <button type="submit"
                             class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition">
                             Selesai
+                          </button>
+                        </form>
+                        <form method="post" action="delete_order.php" class="inline" onsubmit="return confirm('Yakin ingin menghapus pesanan ini?');">
+                          <input type="hidden" name="id_order" value="<?= $row['id_order']; ?>">
+                          <button type="submit"
+                            class="bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-red-700 transition ml-2">
+                            Hapus
                           </button>
                         </form>
                       <?php else: ?>
@@ -545,9 +559,183 @@ $emyucoin = $row['emyucoin'] ?? 0;
         <!-- ===============================================/USER/==================================================================== -->
 
       <?php elseif ($page === 'user'): ?>
-        <h1 class='text-3xl font-bold mb-4'>👤 User</h1>
-        <p>Kelola data user di sini...</p>
+        <div class="flex gap-4 mb-10">
+          <img src="assets/user.svg" class="invert w-10 h-10" />
+          <h1 class="text-3xl font-bold">Kelola User</h1>
+        </div>
 
+        <?php
+        // Ambil semua user dan saldo emyucoin-nya
+        $users = $koneksi->query("
+      SELECT u.id_user, u.username, u.display_name, u.role, u.timestamp, 
+             COALESCE(eu.emyucoin, 0) AS saldo
+      FROM users u
+      LEFT JOIN emyucoin_user eu ON u.id_user = eu.id_user
+      ORDER BY u.timestamp DESC
+  ");
+        ?>
+
+        <table class="w-full text-sm text-left text-white border border-yellow-500 rounded-xl overflow-hidden">
+          <thead class="bg-[color:#db2525] text-white text-center uppercase text-base">
+            <tr>
+              <th class="px-4 py-3">No</th>
+              <th class="px-4 py-3">Username</th>
+              <th class="px-4 py-3">Display Name</th>
+              <th class="px-4 py-3">Role</th>
+              <th class="px-4 py-3">Tanggal Daftar</th>
+              <th class="px-4 py-3">Saldo Emyucoin</th>
+              <th class="px-4 py-3">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $no = 1;
+            while ($user = $users->fetch_assoc()):
+            ?>
+              <tr class="odd:bg-[color:#18181c] even:bg-[color:#212121] hover:bg-red-600/60 transition">
+                <td class="px-4 py-3 text-center"><?= $no++; ?></td>
+                <td class="px-4 py-3 font-semibold"><?= htmlspecialchars($user['username']); ?></td>
+                <td class="px-4 py-3"><?= htmlspecialchars($user['display_name']); ?></td>
+                <td class="px-4 py-3 text-center">
+                  <?php if ($user['role'] === 'admin'): ?>
+                    <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold">Admin</span>
+                  <?php else: ?>
+                    <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold">User</span>
+                  <?php endif; ?>
+                </td>
+                <td class="px-4 py-3 text-center"><?= date('d M Y', strtotime($user['timestamp'])); ?></td>
+                <td class="px-4 py-3 text-yellow-400 font-bold text-center">
+                  EC <?= number_format($user['saldo'], 0, ',', '.'); ?>
+                </td>
+                <td class="px-4 py-3 flex justify-center gap-3">
+                  <button onclick="openSaldoPopup(<?= $user['id_user'] ?>, '<?= htmlspecialchars($user['display_name']) ?>')" class="bg-[#ffb4b4]/30 hover:bg-[#ff3939] text-white px-3 py-1 rounded-lg text-xs transition">Tambah Saldo</button>
+                  <button onclick="openSaldoKurangPopup(<?= $user['id_user'] ?>, '<?= htmlspecialchars($user['display_name']) ?>')" class="bg-[#ffb4b4]/30 hover:bg-[#ff3939] text-white px-3 py-1 rounded-lg text-xs transition">Kurangi Saldo</button>
+                  <?php if ($user['role'] !== 'admin'): ?>
+                    <button onclick="openDeletePopup(<?= $user['id_user'] ?>, '<?= htmlspecialchars($user['username']) ?>')" class="bg-[#2a2a2a] hover:bg-red-700 text-white px-3 py-1 rounded-lg text-xs transition">Hapus</button>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+
+        <!-- Popup Tambah Saldo -->
+        <div id="saldoPopup" class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+          <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-auto p-6 relative">
+            <button onclick="closeSaldoPopup()" class="absolute top-3 right-4 text-xl text-white hover:text-[#db2525]">✕</button>
+            <h3 class="text-xl font-bold text-white mb-4">Tambah Saldo</h3>
+            <p class="text-sm text-gray-300 mb-2">User: <span id="saldoUser" class="font-semibold text-gray-300"></span></p>
+            <input type="number" id="saldoInput" placeholder="Masukkan jumlah Emyucoin" class="w-full px-3 py-2 rounded bg-[#2a2a2a] text-white outline-none mb-4" />
+            <button onclick="tambahSaldo()" class="w-full bg-[#db2525] hover:bg-[#ff3939] text-white py-2 rounded-lg transition">Simpan</button>
+            <input type="hidden" id="saldoUserId">
+          </div>
+        </div>
+
+        <!-- Popup Kurangi Saldo -->
+        <div id="saldoKurangPopup" class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+          <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-auto p-6 relative">
+            <button onclick="closeSaldoKurangPopup()" class="absolute top-3 right-4 text-xl text-white hover:text-[#db2525]">✕</button>
+            <h3 class="text-xl font-bold text-white mb-4">Kurangi Saldo</h3>
+            <p class="text-sm text-gray-300 mb-2">User: <span id="saldoKurangUser" class="font-semibold text-gray-300"></span></p>
+            <input type="number" id="saldoKurangInput" placeholder="Masukkan jumlah Emyucoin yang dikurangi" class="w-full px-3 py-2 rounded bg-[#2a2a2a] text-white outline-none mb-4" />
+            <button onclick="kurangiSaldo()" class="w-full bg-[#db2525] hover:bg-[#ff3939] text-white py-2 rounded-lg transition">Simpan</button>
+            <input type="hidden" id="saldoKurangUserId">
+          </div>
+        </div>
+
+        <!-- Popup Hapus User -->
+        <div id="deletePopup" class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
+          <div class="bg-[color:#1f1f1f] rounded-xl shadow-lg w-[700px] h-auto p-6 relative">
+            <button onclick="closeDeletePopup()" class="absolute top-3 right-4 text-xl text-white hover:text-[#db2525]">✕</button>
+            <h3 class="text-xl font-bold text-white mb-4">Hapus User</h3>
+            <p class="text-gray-300 mb-5">Apakah kamu yakin ingin menghapus user <b id="deleteUser"></b>?</p>
+            <div class="flex justify-end gap-3">
+              <button onclick="closeDeletePopup()" class="px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-700">Batal</button>
+              <button onclick="hapusUser()" class="px-4 py-2 bg-red-600 rounded-lg hover:bg-red-700 text-white">Hapus</button>
+            </div>
+            <input type="hidden" id="deleteUserId">
+          </div>
+        </div>
+
+        <script>
+          // Popup Tambah Saldo
+          function openSaldoPopup(id, name) {
+            document.getElementById('saldoPopup').classList.remove('hidden');
+            document.getElementById('saldoUser').textContent = name;
+            document.getElementById('saldoUserId').value = id;
+          }
+
+          function closeSaldoPopup() {
+            document.getElementById('saldoPopup').classList.add('hidden');
+            document.getElementById('saldoInput').value = '';
+          }
+
+          function tambahSaldo() {
+            const id = document.getElementById('saldoUserId').value;
+            const amount = document.getElementById('saldoInput').value;
+            if (amount <= 0) return alert('Masukkan jumlah saldo yang valid!');
+            fetch('tambah_saldo.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: `id=${id}&amount=${amount}`
+            }).then(r => r.text()).then(res => {
+              location.reload();
+            });
+          }
+
+          // Popup Kurangi Saldo
+          function openSaldoKurangPopup(id, name) {
+            document.getElementById('saldoKurangPopup').classList.remove('hidden');
+            document.getElementById('saldoKurangUser').textContent = name;
+            document.getElementById('saldoKurangUserId').value = id;
+          }
+
+          function closeSaldoKurangPopup() {
+            document.getElementById('saldoKurangPopup').classList.add('hidden');
+            document.getElementById('saldoKurangInput').value = '';
+          }
+
+          function kurangiSaldo() {
+            const id = document.getElementById('saldoKurangUserId').value;
+            const amount = document.getElementById('saldoKurangInput').value;
+            if (amount <= 0) return alert('Masukkan jumlah saldo yang valid!');
+            fetch('kurangi_saldo.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: `id=${id}&amount=${amount}`
+            }).then(r => r.text()).then(res => {
+              location.reload();
+            });
+          }
+
+          // Popup Hapus User
+          function openDeletePopup(id, username) {
+            document.getElementById('deletePopup').classList.remove('hidden');
+            document.getElementById('deleteUser').textContent = username;
+            document.getElementById('deleteUserId').value = id;
+          }
+
+          function closeDeletePopup() {
+            document.getElementById('deletePopup').classList.add('hidden');
+          }
+
+          function hapusUser() {
+            const id = document.getElementById('deleteUserId').value;
+            fetch('hapus_user.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: `id=${id}`
+            }).then(r => r.text()).then(res => {
+              location.reload();
+            });
+          }
+        </script>
       <?php else: ?>
         <?php header("Location: admin.php?page=orders") ?>
       <?php endif ?>
