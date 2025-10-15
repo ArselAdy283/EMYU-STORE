@@ -567,7 +567,7 @@ $emyucoin = $row['emyucoin'] ?? 0;
         <?php
         // Ambil semua user dan saldo emyucoin-nya
         $users = $koneksi->query("
-      SELECT u.id_user, u.username, u.display_name, u.role, u.timestamp, 
+      SELECT u.id_user, u.username, u.profile_pic, u.display_name, u.role, u.timestamp, 
              COALESCE(eu.emyucoin, 0) AS saldo
       FROM users u
       LEFT JOIN emyucoin_user eu ON u.id_user = eu.id_user
@@ -594,7 +594,12 @@ $emyucoin = $row['emyucoin'] ?? 0;
             ?>
               <tr class="odd:bg-[color:#18181c] even:bg-[color:#212121] hover:bg-red-600/60 transition">
                 <td class="px-4 py-3 text-center"><?= $no++; ?></td>
-                <td class="px-4 py-3 font-semibold"><?= htmlspecialchars($user['username']); ?></td>
+                <td class="px-4 py-3 font-semibold">
+                  <div class="flex gap-2 items-center">
+                    <img src="profile_pic/<?= htmlspecialchars($user['profile_pic']); ?>" alt="<?= htmlspecialchars($user['profile_pic']); ?>" class="w-8 h-8 rounded-full object-cover">
+                    <?= htmlspecialchars($user['username']); ?>
+                  </div>
+                </td>
                 <td class="px-4 py-3"><?= htmlspecialchars($user['display_name']); ?></td>
                 <td class="px-4 py-3 text-center">
                   <?php if ($user['role'] === 'admin'): ?>

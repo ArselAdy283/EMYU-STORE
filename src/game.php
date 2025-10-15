@@ -115,7 +115,7 @@ if ($id_user) {
                             <p class="text-white text-sm font-semibold">
                                 <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
                             </p>
-                            <p class="text-[#ffed00] text-xs font-semibold">IDR <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </a>
                     <?php endif; ?>
                 </div>

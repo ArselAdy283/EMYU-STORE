@@ -77,7 +77,7 @@ if (!$item) die("Item tidak ditemukan.");
         <form method="POST" action="hapus_item.php" class="mt-4">
             <input type="hidden" name="id_item" value="<?= $item['id_item']; ?>">
             <button type="submit"
-                class="mt-4 bg-[#db2525] hover:bg-red-700 px-[150px] py-2 rounded-full text-black font-semibold transition">
+                class="mt-4 bg-[#db2525] hover:bg-red-700 w-[400px] h-[40px] py-2 rounded-full text-black font-semibold transition">
                 Hapus Item
             </button>
         </form>

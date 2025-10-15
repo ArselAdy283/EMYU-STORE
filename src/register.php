@@ -2,6 +2,7 @@
 
 session_start();
 include 'koneksi.php';
+include 'navbar.php';
 
 ?>
 
@@ -17,9 +18,34 @@ include 'koneksi.php';
 </head>
 
 <body class="overflow-x-hidden overflow-y-scroll bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] min-h-screen text-white">
-    <?php include 'navbar.php'; ?>
+
 
     <h1 class="text-5xl font-extrabold text-[#ffed00] text-center mt-12">Account</h1>
+    <?php
+    if (isset($_POST['submit'])) {
+        $display_name = $_POST['display_name'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        // Cek apakah username sudah ada
+        $cek = $koneksi->prepare("SELECT id_user FROM users WHERE username = ?");
+        $cek->bind_param("s", $username);
+        $cek->execute();
+        $result = $cek->get_result();
+
+        if ($result->num_rows > 0) {
+            echo '<h1 class="bg-red-500 text-white text-center translate-x-[580px] translate-y-[20px] w-[382px]">Username sudah digunakan</h1>';
+        } else {
+            // Username belum ada, lanjut insert
+            $stmt = $koneksi->prepare("INSERT INTO users (username, password, display_name) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $hash, $display_name);
+            $stmt->execute();
+            header("location: login.php");
+        }
+    }
+    ?>
     <form method="POST" action="" class="flex flex-col items-center mt-10 space-y-6">
         <div class="flex items-center w-80 bg-white rounded-2xl px-4 py-3 text-[#922]">
             <img src="assets/user.svg" class="h-6 w-6 mr-3" />
@@ -50,23 +76,6 @@ include 'koneksi.php';
         </p>
 
     </form>
-
-    <?php
-
-    if (isset($_POST['submit'])) {
-        $display_name = $_POST['display_name'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $stmt = $koneksi->prepare("INSERT INTO users (username, password, display_name) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $username, $hash, $display_name);
-        $stmt->execute();
-        header('Location: login.php');
-    }
-
-    ?>
     <!-- Link daftar -->
 </body>
 
