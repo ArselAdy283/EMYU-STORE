@@ -25,7 +25,7 @@ if (isset($_SESSION['id_user'])) {
     </div>
 
     <!-- Menu -->
-    <ul class="flex space-x-8 text-xl text-white items-center">
+    <ul class="flex space-x-8 text-xl text-white items-center max-md:hidden">
         <div class="font-sm text-lg bg-red-800/70 w-[200px] pl-3 pr-3 py-1 rounded-[2px] flex justify-between items-center">
             <span>
                 <span class="text-yellow-300">EC</span> <?= number_format($emyucoin, 0, ',', '.') ?>
@@ -38,5 +38,8 @@ if (isset($_SESSION['id_user'])) {
         <li><a href="inbox.php" class="nav-link font-semibold hover:text-yellow-300">Inbox</a></li>
         <li><a href="account.php" class="nav-link font-semibold hover:text-yellow-300">Account</a></li>
     </ul>
+    <div class="md:hidden">
+        <img src="assets/list.svg" alt="list" class="invert"/>
+    </div>
 </nav>
 <script src="script.js"></script>
