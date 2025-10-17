@@ -23,7 +23,7 @@ if (!isset($_SESSION['username'])) {
 
     ?>
 
-    <div class="flex flex-col items-center mt-10 translate-x-[180px] translate-y-[-50px]">
+    <div class="flex flex-col items-center mt-10 md:translate-x-[180px] translate-y-[-50px]">
         <section class="w-2/3 pt-6 pb-20">
             <div class="mt-8 w-full max-w-2xl bg-red-800/70 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
                 <div class="flex items-center gap-6">
@@ -59,7 +59,7 @@ if (!isset($_SESSION['username'])) {
                     </button>
 
                     <?php if ($_SESSION['role'] === 'admin'): ?>
-                        <div class="flex justify-start mt-2 translate-x-[68px]">
+                        <div class="flex justify-start mt-2 md:translate-x-[68px]">
                             <a href="admin.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
                                 <img src="assets/code.svg" alt="admin" class="w-14 h-14 invert">
                                 <div class="mt-1 text-lg">Admin</div>
@@ -74,7 +74,7 @@ if (!isset($_SESSION['username'])) {
                         </div>
                     <?php endif; ?>
 
-                    <div class="flex justify-center mt-2 col-span-2 translate-x-[-103px]">
+                    <div class="flex justify-center mt-2 col-span-2 translate-x-[-45px] md:translate-x-[-103px]">
                         <a href="logout.php" class="flex flex-col items-center transform transition duration-300 hover:scale-110">
                             <img src="assets/sign-out.svg" alt="logout" class="w-14 h-14 invert">
                             <div class="mt-1 text-lg">Logout</div>
@@ -84,8 +84,8 @@ if (!isset($_SESSION['username'])) {
             </div>
         </section>
         <!-- SETTING POPUP -->
-        <div id="settingPopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
-            <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
+        <div id="settingPopup" class="hidden fixed bg-opacity-50 md:translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] h-[500px] md:h-[445px] p-6 relative">
                 <button onclick="document.getElementById('settingPopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
@@ -94,8 +94,8 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <!-- AKUN GAME POPUP -->
-        <div id="akunGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
-            <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
+        <div id="akunGamePopup" class="hidden fixed bg-opacity-50 md:translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] h-[500px] md:h-[445px] p-6 relative">
                 <button onclick="document.getElementById('akunGamePopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
@@ -104,8 +104,8 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <!-- INPUT ID GAME POPUP -->
-        <div id="idGamePopup" class="hidden fixed bg-opacity-50 translate-x-[-170px] translate-y-[56px]">
-            <div class="bg-[color:#70060d] rounded-xl shadow-lg w-[680px] h-[445px] p-6 relative">
+        <div id="idGamePopup" class="hidden fixed bg-opacity-50 md:translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] h-[500px] md:h-[445px] p-6 relative">
                 <button onclick="document.getElementById('idGamePopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 

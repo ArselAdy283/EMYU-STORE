@@ -12,12 +12,12 @@ include 'koneksi.php';
     <div class="relative group">
         <img src="profile_pic/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" 
              id="preview" 
-             class="w-[180px] h-[180px] rounded-full object-cover cursor-pointer" />
+             class="w-[90px] h-[90px] md:w-[180px] md:h-[180px] rounded-full object-cover cursor-pointer" />
 
         <!-- Overlay Pensil -->
         <label for="profile_pic" 
                class="absolute inset-0 flex items-center justify-center bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer">
-            <img src="assets/pencil.svg" class="w-16 h-16 invert" />
+            <img src="assets/pencil.svg" class="md:w-16 md:h-16 invert" />
         </label>
 
         <!-- Input file hidden -->
