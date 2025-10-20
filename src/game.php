@@ -4,17 +4,16 @@ include 'navbar.php';
 include 'koneksi.php';
 
 $id_user = $_SESSION['id_user'] ?? null;
-
 $game = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $query = mysqli_query(
     $koneksi,
     "SELECT g.id_game, g.nama_game, g.icon_game, i.id_item, 
-            i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
-     FROM games g
-     JOIN items i ON g.id_game = i.id_game
-     WHERE g.id_game = $game
-     ORDER BY CAST(i.jumlah_item AS UNSIGNED) ASC"
+          i.nama_item, i.jumlah_item, i.icon_item, i.harga_item
+   FROM games g
+   JOIN items i ON g.id_game = i.id_game
+   WHERE g.id_game = $game
+   ORDER BY CAST(i.jumlah_item AS UNSIGNED) ASC"
 );
 $dataGame = mysqli_fetch_assoc($query);
 
@@ -41,99 +40,82 @@ if ($id_user) {
 
 <body class="overflow-x-hidden overflow-y-scroll min-h-screen bg-gradient-to-tr from-[#ff392c] via-black to-[#ff392c] font-sans text-white">
 
-    <div class="translate-x-[200px]">
-        <div class="flex items-center gap-4 mb-10 translate-x-[125px]">
-            <img src="assets/<?= $dataGame['icon_game']; ?>"
-                alt="<?= $dataGame['nama_game'] ?>"
-                class="w-16 h-16 rounded-xl">
-            <div>
-                <h1 class="text-2xl font-bold"><?= $dataGame['nama_game']; ?></h1>
-            </div>
+    <div class="md:translate-x-[200px] flex flex-col items-center md:items-start px-4 md:px-0 py-10">
+        <!-- Header Game -->
+        <div class="flex flex-col md:flex-row items-center md:translate-x-[125px] gap-4 mb-10 text-center md:text-left">
+            <img src="assets/<?= $dataGame['icon_game']; ?>" alt="<?= $dataGame['nama_game'] ?>" class="w-16 h-16 md:w-20 md:h-20 rounded-xl">
+            <h1 class="text-2xl md:text-3xl font-bold"><?= $dataGame['nama_game']; ?></h1>
         </div>
 
         <!-- FORM INPUT -->
         <form method="POST" action="edit_akun_game.php?game=<?= strtolower($dataGame['nama_game']); ?>"
-            class="flex flex-col gap-4 w-[500px] translate-x-[103px] mb-[25px]">
-
+            class="flex flex-col md:flex-row md:flex-nowrap gap-4 w-full md:w-[500px] md:translate-x-[103px] mb-[25px]">
             <?php if ($game == 1): // MLBB 
             ?>
-                <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
+                <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                     <input type="tel" name="id_akun_game"
                         placeholder="ID AKUN"
                         value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
-                        class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
+                        class="w-full md:w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
 
                     <input type="tel" name="id_zona_game"
                         placeholder="ID ZONA"
                         value="<?= htmlspecialchars($akun['id_zona_game'] ?? '') ?>"
-                        class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white">
+                        class="w-full md:w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white">
                 </div>
 
             <?php elseif ($game == 2): // Efootball 
             ?>
-                <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
-                    <input type="text" name="username_efootball"
-                        placeholder="USERNAME"
-                        value="<?= htmlspecialchars($akun['username_akun'] ?? '') ?>"
-                        class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
-                </div>
+                <input type="text" name="username_efootball"
+                    placeholder="USERNAME"
+                    value="<?= htmlspecialchars($akun['username_akun'] ?? '') ?>"
+                    class="w-full md:w-[500px] bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
 
             <?php elseif ($game == 3): // Free Fire 
             ?>
-                <div class="flex px-[20px] w-[500px] h-[50px] gap-6">
-                    <input type="tel" name="id_akun_game"
-                        placeholder="ID AKUN"
-                        value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
-                        class="w-80 bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
-                </div>
-
+                <input type="tel" name="id_akun_game"
+                    placeholder="ID AKUN"
+                    value="<?= htmlspecialchars($akun['id_akun'] ?? '') ?>"
+                    class="w-full md:w-[500px] bg-red-800/70 rounded-2xl px-4 py-2 text-white" required>
             <?php endif; ?>
         </form>
 
         <!-- LIST ITEM -->
-        <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))] max-w-[888px] mx-auto translate-x-[-200px]">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-[900px] md:max-w-[888px] mx-auto md:translate-x-[-200px]">
             <?php
             mysqli_data_seek($query, 0);
             while ($row = mysqli_fetch_assoc($query)) : ?>
-                <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl transform transition duration-300 hover:scale-110">
+                <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl transform transition duration-300 hover:scale-110 flex flex-col items-center justify-center text-center">
                     <?php if ($id_user): ?>
-                        <!-- Sudah login -->
-                        <button onclick="pembayaranPopup('<?= $row['id_item']; ?>')"
-                            class="flex flex-col items-center justify-center translate-x-[32px]"
-                            data-item="<?= $row['id_item']; ?>">
-                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-35 h-35 mb-2">
-                            <p class="text-white text-sm font-semibold">
-                                <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
-                            </p>
-                            <p class="text-[#ffed00] text-xs font-semibold">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
+                        <button onclick="pembayaranPopup('<?= $row['id_item']; ?>')" data-item="<?= $row['id_item']; ?>" class="flex flex-col items-center justify-center">
+                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-24 h-24 mb-2 object-cover rounded-lg">
+                            <p class="text-white text-sm font-semibold"><?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold mt-1">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </button>
                     <?php else: ?>
-                        <!-- Belum login -->
-                        <a href="login.php"
-                            class="flex flex-col items-center justify-center item-link">
-                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-35 h-35 mb-2">
-                            <p class="text-white text-sm font-semibold">
-                                <?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?>
-                            </p>
-                            <p class="text-[#ffed00] text-xs font-semibold">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
+                        <a href="login.php" class="flex flex-col items-center justify-center">
+                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-24 h-24 mb-2 object-cover rounded-lg">
+                            <p class="text-white text-sm font-semibold"><?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?></p>
+                            <p class="text-[#ffed00] text-xs font-semibold mt-1">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </a>
                     <?php endif; ?>
                 </div>
             <?php endwhile; ?>
         </div>
-
-        <!-- MODAL PEMABAYARAN  -->
     </div>
+
+    <!-- MODAL PEMBAYARAN -->
     <div id="pembayaranPopup"
-        class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-        <div class="bg-[color:#6f050c] rounded-xl shadow-lg w-[700px] h-[500px] p-6 relative">
+        class="hidden fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4">
+        <div
+            class="bg-[#6f050c] rounded-xl shadow-lg w-full max-w-2xl h-[500px] md:h-[500px] md:overflow-hidden overflow-y-auto p-6 relative">
             <button onclick="document.getElementById('pembayaranPopup').classList.add('hidden')"
                 class="absolute top-4 right-6 text-white hover:text-[#ffed00] transition text-xl">✖</button>
-
             <div id="pembayaranPopupContent"></div>
         </div>
     </div>
-    
+
+
     <script>
         function pembayaranPopup(item) {
             let idAkun = document.querySelector("input[name='id_akun_game']");

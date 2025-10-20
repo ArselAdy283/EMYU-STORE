@@ -24,8 +24,8 @@ if (!isset($_SESSION['username'])) {
     ?>
 
     <div class="flex flex-col items-center mt-10 md:translate-x-[180px] translate-y-[-50px]">
-        <section class="w-2/3 pt-6 pb-20">
-            <div class="mt-8 w-full max-w-2xl bg-red-800/70 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
+        <section class="md:w-2/3 pt-6 pb-20">
+            <div class="mt-8 w-full md:max-w-2xl bg-red-800/70 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
                 <div class="flex items-center gap-6">
                     <div>
                         <img src="profile_pic/<?= $_SESSION['profile_pic'] ?? 'profile_pic.png'; ?>" class="w-20 h-20 rounded-full object-cover">
@@ -85,7 +85,7 @@ if (!isset($_SESSION['username'])) {
         </section>
         <!-- SETTING POPUP -->
         <div id="settingPopup" class="hidden fixed bg-opacity-50 md:translate-x-[-170px] translate-y-[56px]">
-            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] h-[500px] md:h-[445px] p-6 relative">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] w-[400px] h-[500px] md:h-[445px] p-6 relative">
                 <button onclick="document.getElementById('settingPopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
@@ -95,7 +95,7 @@ if (!isset($_SESSION['username'])) {
 
         <!-- AKUN GAME POPUP -->
         <div id="akunGamePopup" class="hidden fixed bg-opacity-50 md:translate-x-[-170px] translate-y-[56px]">
-            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] h-[500px] md:h-[445px] p-6 relative">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] w-[400px] h-[500px] md:h-[445px] p-6 relative">
                 <button onclick="document.getElementById('akunGamePopup').classList.add('hidden')"
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
