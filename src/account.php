@@ -110,7 +110,17 @@ if (!isset($_SESSION['username'])) {
                     class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
 
                 <div id="idGamePopupContent">
-                    <!-- Konten edit_akun_game.php bakal dimuat di sini lewat fetch -->
+                </div>
+            </div>
+        </div>
+
+        <!-- GANTI PASSWORD -->
+        <div id="gantiPasswordPopup" class="hidden fixed bg-opacity-50 md:translate-x-[-170px] translate-y-[56px]">
+            <div class="bg-[color:#70060d] rounded-xl shadow-lg md:w-[680px] h-[500px] md:h-[445px] p-6 relative">
+                <button onclick="document.getElementById('gantiPasswordPopup').classList.add('hidden')"
+                    class="absolute top-2 right-2 translate-x-[-20px] translate-y-[10px] text-white hover:text-[#ffed00] transition text-xl">✖</button>
+
+                <div id="gantiPasswordContent">
                 </div>
             </div>
         </div>

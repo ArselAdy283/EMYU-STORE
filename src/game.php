@@ -49,7 +49,7 @@ if ($id_user) {
 
         <!-- FORM INPUT -->
         <form method="POST" action="edit_akun_game.php?game=<?= strtolower($dataGame['nama_game']); ?>"
-            class="flex flex-col md:flex-row md:flex-nowrap gap-4 w-full md:w-[500px] md:translate-x-[103px] mb-[25px]">
+            class="flex flex-col md:flex-row md:flex-nowrap gap-4 w-full md:w-[500px] md:translate-x-[115px] mb-[25px]">
             <?php if ($game == 1): // MLBB 
             ?>
                 <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
@@ -88,13 +88,13 @@ if ($id_user) {
                 <div class="aspect-square bg-red-800/70 backdrop-blur-md rounded-2xl transform transition duration-300 hover:scale-110 flex flex-col items-center justify-center text-center">
                     <?php if ($id_user): ?>
                         <button onclick="pembayaranPopup('<?= $row['id_item']; ?>')" data-item="<?= $row['id_item']; ?>" class="flex flex-col items-center justify-center">
-                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-24 h-24 mb-2 object-cover rounded-lg">
+                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-2 object-cover rounded-lg">
                             <p class="text-white text-sm font-semibold"><?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?></p>
                             <p class="text-[#ffed00] text-xs font-semibold mt-1">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </button>
                     <?php else: ?>
                         <a href="login.php" class="flex flex-col items-center justify-center">
-                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-24 h-24 mb-2 object-cover rounded-lg">
+                            <img src="assets/<?= $row['icon_item']; ?>" alt="<?= $row['nama_item']; ?>" class="w-30 h-30 mb-2 object-cover rounded-lg">
                             <p class="text-white text-sm font-semibold"><?= $row['jumlah_item']; ?> <?= $row['nama_item']; ?></p>
                             <p class="text-[#ffed00] text-xs font-semibold mt-1">EC <?= number_format($row['harga_item'], 0, ',', '.'); ?></p>
                         </a>

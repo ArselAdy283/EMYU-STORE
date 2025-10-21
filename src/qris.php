@@ -33,7 +33,7 @@ if (!$id_emyucoin) {
 </div>
 
 <!-- Form -->
-<div class="flex flex-col md:flex-row items-center justify-center gap-4 md:translate-x-[400px] md:translate-y-[-50px] mt-6 md:mt-0">
+<div class="flex flex-col md:flex-row items-center justify-center gap-4 md:translate-x-[150px] md:translate-y-[-50px] mt-6 md:mt-0">
     <form method="POST" action="proses_bukti.php" enctype="multipart/form-data" 
           class="flex flex-col md:flex-row items-center gap-4">
         <input type="hidden" name="id_emyucoin" value="<?= htmlspecialchars($id_emyucoin) ?>">
